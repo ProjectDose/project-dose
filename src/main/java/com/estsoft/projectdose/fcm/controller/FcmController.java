@@ -28,7 +28,7 @@ public class FcmController {
 		this.fcmService = fcmService;
 	}
 
-	@PostMapping("/api/v1/fcm/sendMessage")
+	@PostMapping("/sendMessage")
 	public ResponseEntity<ApiResponseWrapper<Object>> pushMessage(@RequestBody @Validated FcmSendDto fcmSendDto)
 		throws IOException {
 		log.debug("[+] 푸시 메시지를 전송합니다. ");
