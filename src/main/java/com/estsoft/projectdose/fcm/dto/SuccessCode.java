@@ -1,5 +1,8 @@
 package com.estsoft.projectdose.fcm.dto;
 
+import lombok.Getter;
+
+@Getter
 public enum SuccessCode {
 
 	SELECT_SUCCESS("200", "Successfully fetched data"),
@@ -13,11 +16,4 @@ public enum SuccessCode {
 		this.message = message;
 	}
 
-	public String getStatus() {
-		return status;
-	}
-
-	public String getMessage() {
-		return message;
-	}
 }
