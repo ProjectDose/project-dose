@@ -38,7 +38,7 @@ public class Users {
 	private LocalDate joindate;
 
 	@Column(name = "is_deleted", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
-	private boolean isDeleted = false;
+	private boolean isDeleted;
 
 	@Enumerated(EnumType.STRING)
 	private Role role = Role.ROLE_USER;
