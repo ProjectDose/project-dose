@@ -25,7 +25,7 @@ public class DoseSchedule {
 	private Users users;
 
 	@Column(name = "medication_name", nullable = false, length = 100)
-	private String medjcationName;
+	private String medicationName;
 
 	@Type(type = "json")
 	@Column(name = "dose_time", nullable = false, columnDefinition = "json")
@@ -36,5 +36,5 @@ public class DoseSchedule {
 	private LocalDate joindate;
 
 	@Column(name = "is_deleted", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
-	private boolean isDeleted = false;
+	private boolean isDeleted;
 }
