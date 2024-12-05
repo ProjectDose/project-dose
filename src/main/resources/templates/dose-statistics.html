@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>투약 관리</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f4f4f8;
+            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #007bff;
+        }
+        .achievement-high { background-color: #28a745; color: white; }
+        .achievement-medium { background-color: #ffc107; color: dark; }
+        .achievement-low { background-color: #dc3545; color: white; }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <!-- 상단 헤더 -->
+    <header class="bg-primary text-white py-3 mb-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h1 class="h4 mb-0">투약 관리</h1>
+            <div>
+                <button id="downloadPdfBtn" class="btn btn-light me-2">
+                    <i class="bi bi-file-pdf text-primary"></i>
+                </button>
+                <button id="emailPdfBtn" class="btn btn-light">
+                    <i class="bi bi-envelope text-primary"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 탭 메뉴 -->
+    <div class="container">
+        <ul class="nav nav-pills nav-fill mb-3" id="mainTabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#calendar" data-bs-toggle="pill">
+                    <i class="bi bi-calendar"></i> 달력
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#statistics" data-bs-toggle="pill">
+                    <i class="bi bi-bar-chart"></i> 통계
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#medications" data-bs-toggle="pill">
+                    <i class="bi bi-capsule"></i> 약 목록
+                </a>
+            </li>
+        </ul>
+
+        <!-- 탭 컨텐츠 -->
+        <div class="tab-content">
+            <!-- 달력 탭 -->
+            <div class="tab-pane fade show active" id="calendar">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div id="medicationCalendar"></div>
+                    </div>
+                </div>
+                <div id="dailyDetailsContainer" class="card mb-3" style="display:none;">
+                    <div class="card-header">
+                        상세 투약 정보
+                    </div>
+                    <div class="card-body" id="dailyDetailsContent">
+                        <!-- 동적으로 채워질 영역 -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- 통계 탭 -->
+            <div class="tab-pane fade" id="statistics">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">투약 통계</h5>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="bg-success text-white p-3 rounded">
+                                    <small>총 투약률</small>
+                                    <h3 class="mb-0">85%</h3>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="bg-info text-white p-3 rounded">
+                                    <small>이번 달 투약률</small>
+                                    <h3 class="mb-0">92%</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 약 목록 탭 -->
+            <div class="tab-pane fade" id="medications">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        현재 복용 중인 약
+                        <button class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-plus"></i> 추가
+                        </button>
+                    </div>
+                    <ul class="list-group list-group-flush" id="medicationList">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="my-0">아스피린</h6>
+                                <small class="text-muted">1일 1회, 아침</small>
+                            </div>
+                            <span class="badge bg-success">복용 중</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="my-0">비타민 C</h6>
+                                <small class="text-muted">1일 1회, 저녁</small>
+                            </div>
+                            <span class="badge bg-success">복용 중</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF 보고서 모달 -->
+    <div class="modal fade" id="reportModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">보고서 생성</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">시작 날짜</label>
+                        <input type="date" id="startDateInput" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">종료 날짜</label>
+                        <input type="date" id="endDateInput" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="generatePdfBtn" class="btn btn-primary w-100">
+                        PDF 다운로드
+                    </button>
+                    <button id="sendEmailBtn" class="btn btn-success w-100 mt-2">
+                        이메일 전송
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 필수 JavaScript 라이브러리 -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+
+<script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        // FullCalendar 초기화
+        var calendarEl = document.getElementById('medicationCalendar');
+        var achievementRates = /*[[${monthlyAchievementRates}]]*/ {};
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            height: 'auto',
+            locale: 'ko',
+            events: Object.keys(achievementRates).map(function(date) {
+                return {
+                    title: achievementRates[date] + '%',
+                    start: date,
+                    className: getColorClass(achievementRates[date])
+                };
+            }),
+            dateClick: function(info) {
+                // 날짜 클릭 시 상세 정보 가져오기
+                fetch('/statistics/daily-details?selectedDate=' + info.dateStr)
+                    .then(response => response.text())
+                    .then(html => {
+                        const detailsContainer = document.getElementById('dailyDetailsContainer');
+                        const detailsContent = document.getElementById('dailyDetailsContent');
+                        detailsContent.innerHTML = html;
+                        detailsContainer.style.display = 'block';
+                    });
+            }
+        });
+        calendar.render();
+
+        function getColorClass(achievementRate) {
+            if (achievementRate >= 90) return 'achievement-high';
+            if (achievementRate >= 70) return 'achievement-medium';
+            return 'achievement-low';
+        }
+
+        // PDF/이메일 모달 관련 이벤트
+        const reportModal = new bootstrap.Modal(document.getElementById('reportModal'));
+        const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+        const emailPdfBtn = document.getElementById('emailPdfBtn');
+        const generatePdfBtn = document.getElementById('generatePdfBtn');
+        const sendEmailBtn = document.getElementById('sendEmailBtn');
+
+        [downloadPdfBtn, emailPdfBtn].forEach(btn => {
+            btn.addEventListener('click', () => {
+                reportModal.show();
+            });
+        });
+
+        generatePdfBtn.addEventListener('click', () => {
+            const startDate = document.getElementById('startDateInput').value;
+            const endDate = document.getElementById('endDateInput').value;
+
+            // PDF 다운로드 로직
+            window.location.href = `/report/pdf?userId=${userId}&startDate=${startDate}&endDate=${endDate}`;
+            reportModal.hide();
+        });
+
+        sendEmailBtn.addEventListener('click', () => {
+            const startDate = document.getElementById('startDateInput').value;
+            const endDate = document.getElementById('endDateInput').value;
+
+            // 이메일 전송 로직
+            fetch(`/report/email?userId=${userId}&startDate=${startDate}&endDate=${endDate}`, {
+                method: 'POST'
+            })
+                .then(response => {
+                    if (response.ok) {
+                        alert('보고서가 이메일로 전송되었습니다.');
+                    } else {
+                        alert('전송 중 오류가 발생했습니다.');
+                    }
+                    reportModal.hide();
+                });
+        });
+    });
+</script>
+</body>
+</html>

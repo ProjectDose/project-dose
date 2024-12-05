@@ -11,9 +11,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Getter
 @NoArgsConstructor
 public class Users {
 	@Id
@@ -41,5 +43,5 @@ public class Users {
 	private boolean isDeleted;
 
 	@Enumerated(EnumType.STRING)
-	private Role role = Role.ROLE_USER;
+	private Role role;
 }
