@@ -3,10 +3,13 @@ package com.estsoft.projectdose.calendar.entity;
 import java.time.LocalDate;
 import java.util.Map;
 
+import com.vladmihalcea.hibernate.type.json.JsonType;
+
 import org.hibernate.annotations.Type;
 import org.springframework.data.annotation.CreatedDate;
 
 import com.estsoft.projectdose.users.entity.Users;
+
 
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -25,13 +28,13 @@ public class DoseSchedule {
 	private Long scheduleId;
 
 	@ManyToOne
-	@Column(name = "user_id")
+	@JoinColumn(name = "user_id")
 	private Users users;
 
 	@Column(name = "medication_name", nullable = false, length = 100)
 	private String medicationName;
 
-	@Type(type = "json")
+	@Type(JsonType.class)
 	@Column(name = "dose_time", nullable = false, columnDefinition = "json")
 	private Map<String,Object> doseTime;
 
@@ -59,4 +62,5 @@ public class DoseSchedule {
 		this.joindate = joindate;
 		this.isDeleted = isDeleted;
 	}
+	private boolean isDeleted;
 }
