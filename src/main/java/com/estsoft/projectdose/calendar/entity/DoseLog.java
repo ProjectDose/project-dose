@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.NoArgsConstructor;
 
@@ -19,11 +20,11 @@ public class DoseLog {
 	private Long id;
 
 	@ManyToOne
-	@Column(name = "schedule_id")
+	@JoinColumn(name = "schedule_id")
 	private DoseSchedule doseSchedule;
 
 	@Column(name = "taken", nullable = false,columnDefinition = "BOOLEAN DEFAULT false")
-	private boolean taken = false;
+	private boolean taken;
 
 	@Column(name = "taken_time", nullable = false)
 	private LocalDateTime takenTime;
