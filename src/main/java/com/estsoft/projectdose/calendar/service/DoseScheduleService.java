@@ -25,14 +25,15 @@ public class DoseScheduleService {
 	public void DoseScheduleDelete(Long id){
 		dsr.deleteById(id);
 	}
-	public DoseSchedule update(Long id, UpdateDoseScheduleRequest request){
+	public DoseSchedule update(Long id,UpdateDoseScheduleRequest request){
 		DoseSchedule doseSchedule = dsr.findById(id).orElseThrow(()-> new IllegalArgumentException("no such dose schedule name" + id));
 
-		doseSchedule.update(request.getScheduleId(),request.getUsers(),request.getMedicationName(),request.getDoseTime(),request.getJoindate(),request.isDeleted());
+		doseSchedule.update(request.getScheduleId(), request.getMedicationName(), request.getDoseTime(),
+					request.getDosage(), request.getStartDate(), request.getRepeatInterval(), request.getDaysOfWeek());
 		return doseSchedule;
 	}
 
-	public DoseSchedule findById(Long id) {
-		return dsr.deleteById(id);
+	public DoseSchedule findByid(Long id) {
+		return dsr.findById(id).orElse(null);
 	}
 }

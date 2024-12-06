@@ -1,7 +1,8 @@
 package com.estsoft.projectdose.calendar.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
+import java.util.Optional;
 
 import com.estsoft.projectdose.users.entity.Users;
 
@@ -15,15 +16,26 @@ public class UpdateDoseScheduleRequest {
 	private Users users;
 	private String medicationName;
 	private Map<String,Object> doseTime;
-	private LocalDate joindate;
-	private boolean isDeleted;
+	private String dosage;
+	private int repeatInterval;
+	private Map<String,Object> daysOfWeek;
+	private Date startDate;
 
-	public UpdateDoseScheduleRequest(Long scheduleId,Users users,String medicationName,Map<String,Object> doseTime,LocalDate joindate,boolean isDeleted) {
+	public UpdateDoseScheduleRequest(Long scheduleId,String medicationName,Map<String,Object> doseTime,String dosage,int repeatInterval,Map<String,Object> daysOfWeek,Date startDate) {
 		this.scheduleId = scheduleId;
-		this.users = users;
 		this.medicationName = medicationName;
 		this.doseTime = doseTime;
-		this.joindate = joindate;
-		this.isDeleted = isDeleted;
+		this.dosage = dosage;
+		this.repeatInterval = repeatInterval;
+		this.daysOfWeek = daysOfWeek;
+		this.startDate = startDate;
+	}
+
+	public UpdateDoseScheduleRequest() {
+
+	}
+
+	public Optional<Object> findById(Long id) {
+		return Optional.ofNullable(doseTime.get(id.toString()));
 	}
 }
