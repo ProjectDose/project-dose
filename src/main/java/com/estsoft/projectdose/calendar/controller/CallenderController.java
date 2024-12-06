@@ -59,14 +59,14 @@ public class CallenderController {
 		calendar.setEnddate(endUTC != null ? endUTC.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) : null);
 		calendar.setAllday((Boolean) map.get("allDay"));
 
-		calendarservice.calendarSave(calendar);
+		cs.calendarSave(calendar);
 
 		return calendar;
 	}
 	@DeleteMapping("/CalendarDelete")
 	public String calendarDelete(@RequestParam Long id) throws Exception{
 		try{
-			calendarservice.calendarDelete(id);
+			cs.calendarDelete(id);
 			return "success";
 		}catch(Exception e){
 			e.printStackTrace();

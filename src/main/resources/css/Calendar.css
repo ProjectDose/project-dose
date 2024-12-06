@@ -32,9 +32,9 @@ header {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 50px; /* 헤더 부분 높이 */
-    background-color: #3b82f6;
-    color: white;
+    height: 40px; /* 헤더 부분 높이 */
+    background-color: white;
+    color: black;
     font-size: 16px;
     font-weight: bold;
 }
@@ -44,29 +44,36 @@ header {
     flex: 1; /* 남은 공간을 차지 */
     display: flex;
     overflow-x: scroll;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE 10+ */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     padding: 10px 0;
 }
 
 .calendar::-webkit-scrollbar {
-    display: none; /* Chrome, Safari */
+    display: none;
 }
 
 /* 날짜 박스 */
 .day {
     flex: 0 0 70px; /* 날짜 박스 크기 */
-    height: 90px;
+    height: 70px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     background: white;
     margin: 5px;
-    border-radius: 8px;
+    border-radius: 35px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
     font-size: 14px;
     position: relative;
+    border: 3px solid rgba(128,128,128,0.5);
+    cursor: pointer;
+}
+.day.selected{
+    background: blue;
+    color: white;
+    border-color: blue;
 }
 
 /* 월 표시 */
