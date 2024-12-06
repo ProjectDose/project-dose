@@ -84,3 +84,26 @@ header {
     color: #3b82f6;
     font-weight: bold;
 }
+body{
+    background: white;
+}
+#add-schedule-button {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: blue;
+    color: white;
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+#dose-schedule{
+
+}

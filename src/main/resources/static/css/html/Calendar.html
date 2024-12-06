@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar</title>
-    <link rel="stylesheet" href="../css/Calendar.css">
+    <link rel="stylesheet" href="../Calendar.css">
 </head>
 <header>
 <div class="calendar-container">
@@ -14,6 +14,13 @@
 <script src="../JS/Calendar.js"></script>
 </header>
 <body>
-
-</body>>
+<div class="dose-schedule-container">
+    <table>
+        <tr class="doseScheduleId" th:each="list : ${list}">
+            <td class = "doseScheduleId" th:text="${list.id}"></td>
+        </tr>
+    </table>
+</div>
+<button id="add-schedule-button">+</button>
+</body>
 </html>
