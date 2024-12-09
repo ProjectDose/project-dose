@@ -1,0 +1,109 @@
+/* 기본 스타일 */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    padding-top: 165px; /* 헤더 높이만큼 본문 아래로 밀기 */
+}
+
+header {
+    position: fixed; /* 헤더 고정 */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 165px; /* 헤더 높이 */
+    background: white; /* 헤더 배경 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 살짝 그림자 */
+    z-index: 1000;
+}
+
+/* 달력 컨테이너 */
+.calendar-container {
+    width: 100%; /* 화면 너비에 맞게 */
+    max-width: 375px; /* 최대 너비 제한 */
+    margin: 0 auto; /* 가운데 정렬 */
+    height: 100%; /* 헤더 높이에 맞춤 */
+    display: flex;
+    flex-direction: column;
+}
+
+/* 달력 헤더 */
+.calendar-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px; /* 헤더 부분 높이 */
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* 날짜 박스 컨테이너 */
+.calendar {
+    flex: 1; /* 남은 공간을 차지 */
+    display: flex;
+    overflow-x: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 10px 0;
+}
+
+.calendar::-webkit-scrollbar {
+    display: none;
+}
+
+/* 날짜 박스 */
+.day {
+    flex: 0 0 70px; /* 날짜 박스 크기 */
+    height: 70px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    margin: 5px;
+    border-radius: 35px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    position: relative;
+    border: 3px solid rgba(128,128,128,0.5);
+    cursor: pointer;
+}
+.day.selected{
+    background: blue;
+    color: white;
+    border-color: blue;
+}
+
+/* 월 표시 */
+.month-indicator {
+    position: absolute;
+    top: -20px;
+    font-size: 12px;
+    color: #3b82f6;
+    font-weight: bold;
+}
+body{
+    background: white;
+}
+#add-schedule-button {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    background-color: blue;
+    color: white;
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+}
+#dose-schedule{
+
+}
