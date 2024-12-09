@@ -1,7 +1,8 @@
 package com.estsoft.projectdose.calendar.dto;
 
-import java.time.LocalDate;
+import java.util.Date;
 import java.util.Map;
+
 
 import com.estsoft.projectdose.calendar.entity.DoseSchedule;
 import com.estsoft.projectdose.users.entity.Users;
@@ -18,10 +19,13 @@ public class AddDoseScheduleRequest {
 	private Users users;
 	private String medicationName;
 	private Map<String,Object> doseTime;
-	private LocalDate joindate;
-	private boolean isDeleted;
+	private String dosage;
+	private int repeatInterval;
+	private Map<String,Object> daysOfWeek;
+	private Date startDate;
 
 	public DoseSchedule toEntity(){
-		return DoseSchedule.builder().id(scheduleId).users(users).medicationName(medicationName).doseTime(doseTime).joindate(joindate).build();
+		return DoseSchedule.builder().id(scheduleId).users(users).medicationName(medicationName).doseTime(doseTime).dosage(dosage).repeatInterval(repeatInterval)
+			.daysOfWeek(daysOfWeek).startDate(startDate).build();
 	}
 }

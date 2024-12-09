@@ -18,6 +18,12 @@
     <table>
         <tr class="doseScheduleId" th:each="list : ${list}">
             <td class = "doseScheduleId" th:text="${list.id}"></td>
+            <td class = "user_id" th:text="${list.users.id}"></td>
+            <td class = "medication_name" th:text="${list.dosetime}"></td>
+            <td class = "dosage" th:text="${list.dosage}"></td>
+            <td class = "repeatInterval" th:text="${list.repeat_interval}"></td>
+            <td class = "daysOfWeek" th:text="${list.days_of_interval}"></td>
+            <td class = "StartDate" th:text="${list.StartDate}"></td>
         </tr>
     </table>
 </div>

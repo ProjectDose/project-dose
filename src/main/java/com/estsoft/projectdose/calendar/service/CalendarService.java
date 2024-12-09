@@ -11,23 +11,23 @@ import com.estsoft.projectdose.calendar.repository.DoseScheduleRepository;
 
 @Service
 public class CalendarService {
-	public CalendarRepository cr;
-	public DoseScheduleRepository dsr;
-	public CalendarService(CalendarRepository cr) {
-		this.cr = cr;
+	public CalendarRepository calendarRepository;
+	public DoseScheduleRepository doseScheduleRepository;
+	public CalendarService(CalendarRepository calendarRepository) {
+		this.calendarRepository = calendarRepository;
 	}
 	public List<Calendar> calendarList() throws Exception{
-		return cr.findAll();
+		return calendarRepository.findAll();
 	}
 
 	public Calendar calendarSave(Calendar calendar){
-		return cr.save(calendar);
+		return calendarRepository.save(calendar);
 	}
 
-	public void calendarDelete(Long id) throws Exception{
-		cr.deleteById(id);
+	public void calendarDelete(Long id){
+		calendarRepository.deleteById(id);
 	}
 	public List<DoseSchedule> findAll(){
-		return dsr.findAll();
+		return doseScheduleRepository.findAll();
 	}
 }
