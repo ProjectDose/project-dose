@@ -31,10 +31,6 @@ public class UpdateDoseScheduleRequest {
 		this.startDate = startDate;
 	}
 
-	public UpdateDoseScheduleRequest() {
-
-	}
-
 	public Optional<Object> findById(Long id) {
 		return Optional.ofNullable(doseTime.get(id.toString()));
 	}
