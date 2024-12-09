@@ -1,26 +1,20 @@
 package com.estsoft.projectdose.users.entity;
 
 import java.time.LocalDate;
-
 import org.springframework.data.annotation.CreatedDate;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name="user_id",nullable = false,unique = true)
+	@Column(name = "user_id", nullable = false, unique = true)
 	private Long id;
 
 	@Column(name = "email", nullable = false, unique = true, length = 100)
@@ -44,4 +38,7 @@ public class Users {
 
 	@Enumerated(EnumType.STRING)
 	private Role role;
+
+	@Column(name = "reset_token", length = 100)
+	private String resetToken;
 }
