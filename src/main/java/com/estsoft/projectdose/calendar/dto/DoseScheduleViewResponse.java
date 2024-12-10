@@ -1,11 +1,9 @@
 package com.estsoft.projectdose.calendar.dto;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Map;
 
 import com.estsoft.projectdose.calendar.entity.DoseSchedule;
-import com.estsoft.projectdose.users.entity.Users;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,17 +12,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DoseScheduleViewResponse {
 	private Long scheduleId;
-	private Users users;
+	private Long userId;
 	private String medicationName;
 	private Map<String,Object> doseTime;
 	private String dosage;
 	private int repeatInterval;
 	private Map<String,Object> daysOfWeek;
-	private Date startDate;
+	private LocalDate startDate;
 
 	public DoseScheduleViewResponse(DoseSchedule doseSchedule) {
 		this.scheduleId = doseSchedule.getScheduleId();
-		this.users = doseSchedule.getUsers();
+		this.userId = doseSchedule.getUsers().getId();
 		this.medicationName = doseSchedule.getMedicationName();
 		this.doseTime = doseSchedule.getDoseTime();
 		this.dosage = doseSchedule.getDosage();

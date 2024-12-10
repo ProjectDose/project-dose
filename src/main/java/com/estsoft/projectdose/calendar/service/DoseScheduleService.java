@@ -26,7 +26,7 @@ public class DoseScheduleService {
 		doseScheduleRepository.deleteById(id);
 	}
 	public DoseSchedule update(Long id,UpdateDoseScheduleRequest request){
-		DoseSchedule doseSchedule = doseScheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("no such dose schedule name" + id));
+		DoseSchedule doseSchedule = doseScheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("no such dose schedule :" + id));
 
 		doseSchedule.update(request.getScheduleId(), request.getMedicationName(), request.getDoseTime(),
 					request.getDosage(), request.getStartDate(), request.getRepeatInterval(), request.getDaysOfWeek());

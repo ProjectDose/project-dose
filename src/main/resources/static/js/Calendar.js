@@ -1,3 +1,4 @@
+// 기존 코드 유지
 const calendar = document.getElementById('calendar');
 const calendarHeader = document.getElementById('calendar-header');
 
@@ -91,6 +92,8 @@ function handleScroll() {
         }
     }
 }
+
+// 새로 추가한 코드 통합
 calendar.addEventListener('click', (event) => {
     const target = event.target;
 
@@ -104,8 +107,58 @@ calendar.addEventListener('click', (event) => {
 
         // 현재 클릭된 날짜에 'selected' 클래스 추가
         target.classList.add('selected');
+
+        // 새로 추가된 스케줄 요청 및 업데이트 로직
+        const clickedDate = target.getAttribute('data-date');
+        if (!clickedDate) return;
+
+        // 선택된 날짜로 헤더 업데이트
+        calendarHeader.textContent = `선택된 날짜: ${clickedDate.split('T')[0]}`;
+
+        // 서버에서 해당 날짜의 데이터 가져오기
+        fetch(`/api/schedule?date=${clickedDate.split('T')[0]}`)
+            .then((response) => {
+                if (!response.ok) throw new Error("데이터 요청 실패");
+                return response.json();
+            })
+            .then((data) => updateScheduleTable(data)) // 테이블 업데이트
+            .catch((error) => console.error("Error fetching schedule:", error));
     }
 });
-// 이벤트 연결
+
+// 테이블 업데이트 함수
+function updateScheduleTable(data) {
+    const scheduleContainer = document.querySelector(".dose-schedule-container table");
+    scheduleContainer.innerHTML = `
+        <tr>
+            <th>시간</th>
+            <th>용량</th>
+            <th>반복 간격</th>
+            <th>요일</th>
+            <th>시작일</th>
+        </tr>
+    `;
+
+    if (!data || data.length === 0) {
+        const noDataRow = document.createElement("tr");
+        noDataRow.innerHTML = `<td colspan="5">해당 날짜에 저장된 스케줄이 없습니다.</td>`;
+        scheduleContainer.appendChild(noDataRow);
+        return;
+    }
+
+    data.forEach((item) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>${item.doseTime}</td>
+            <td>${item.dosage}</td>
+            <td>${item.repeatInterval}</td>
+            <td>${item.daysOfWeek}</td>
+            <td>${item.startDate}</td>
+        `;
+        scheduleContainer.appendChild(row);
+    });
+}
+
+// 초기화 호출
 initializeCalendar();
 calendar.addEventListener('scroll', handleScroll);
