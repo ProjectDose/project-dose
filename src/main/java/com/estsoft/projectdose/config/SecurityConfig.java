@@ -10,16 +10,16 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import com.estsoft.projectdose.users.service.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-	@Autowired
-	private CustomUserDetailsService userDetailsService;
+	private final CustomUserDetailsService userDetailsService;
+
+	public SecurityConfig(CustomUserDetailsService userDetailsService) {
+		this.userDetailsService = userDetailsService;
+	}
 
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -27,32 +27,35 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public WebSecurityCustomizer webSecurityCustomizer() {
-		return webSecurity -> webSecurity.ignoring()
-			.requestMatchers("/static/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**");
-	}
-
-	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
-			.authorizeHttpRequests(auth -> auth.anyRequest().permitAll())
-			.formLogin(custom -> custom.loginPage("/login")
+			.authorizeHttpRequests(auth -> auth
+				.requestMatchers("/api/auth/signup", "/api/auth/checkEmailDuplicate", "/api/auth/checkNicknameDuplicate").permitAll()
+				.anyRequest().authenticated()
+			)
+			.formLogin(custom -> custom
+				.loginPage("/login")
 				.loginProcessingUrl("/api/login")
 				.usernameParameter("email")
 				.passwordParameter("password")
 				.successHandler((request, response, authentication) -> {
-					response.getWriter().write("로그인 성공: " + authentication.getAuthorities());
+					response.setContentType("application/json");
+					response.getWriter().write("{\"message\":\"로그인 성공\",\"role\":\"" + authentication.getAuthorities() + "\"}");
 				})
-				.permitAll())
-			.logout(custom -> custom.logoutSuccessUrl("/login")
+				.permitAll()
+			)
+			.logout(custom -> custom
+				.logoutSuccessUrl("/login")
 				.logoutUrl("/api/logout")
 				.deleteCookies("SESSION", "JSESSIONID")
 				.invalidateHttpSession(true)
-				.permitAll())
+				.permitAll()
+			)
 			.csrf(AbstractHttpConfigurer::disable);
 
 		return http.build();
 	}
+
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {

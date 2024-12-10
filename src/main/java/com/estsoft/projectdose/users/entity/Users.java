@@ -1,14 +1,8 @@
 package com.estsoft.projectdose.users.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,8 +30,8 @@ public class Users {
 	private String name;
 
 	@CreatedDate
-	@Column(name = "join_date", nullable = false)
-	private LocalDate joindate;
+	@Column(name = "join_date", nullable = false) // 수정: LocalDateTime으로 변경
+	private LocalDateTime joinDate;
 
 	@Column(name = "is_deleted", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
 	private boolean isDeleted;
@@ -47,4 +41,7 @@ public class Users {
 
 	@Column(name = "reset_token", length = 100)
 	private String resetToken;
+
+	@Column(name = "reset_token_expiry") // 추가: 토큰 만료 시간 필드
+	private LocalDateTime resetTokenExpiry;
 }
