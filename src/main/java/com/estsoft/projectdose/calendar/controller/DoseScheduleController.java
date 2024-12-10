@@ -23,8 +23,10 @@ public class DoseScheduleController {
 		this.doseScheduleService = doseScheduleService;
 	}
 
+	//투약 스케쥴 보여주기
+
 	//새로운 일정 추가
-	@GetMapping("/new-DoseSchedule")
+	@GetMapping("/newDoseSchedule")
 	public String newDoseSchedule(@RequestParam(required = false)Long id, Model model) {
 		if(id==null){
 			model.addAttribute("DoseSchedule", new DoseScheduleViewResponse());
@@ -32,7 +34,7 @@ public class DoseScheduleController {
 			DoseSchedule doseSchedule = doseScheduleService.findByid(id);
 			model.addAttribute("DoseSchedule", new DoseScheduleResponse(doseSchedule));
 		}
-		return "new-DoseSchedule";
+		return "DoseSchedule";
 	}
 
 	//투약 스케쥴 삭제

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar</title>
+    <link rel="stylesheet" href="../static/css/Calendar.css">
+</head>
+<body>
+<header>
+    <div class="calendar-container">
+        <div class="calendar-header" id="calendar-header">오늘: 2024-12-10</div>
+        <div class="calendar" id="calendar"></div>
+    </div>
+</header>
+
+<main>
+    <div class="dose-schedule-container">
+        <table>
+            <thead>
+            <tr>
+                <th>시간</th>
+                <th>용량</th>
+                <th>반복 간격</th>
+                <th>요일</th>
+                <th>시작일</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td colspan="5">날짜를 선택하면 데이터가 표시됩니다.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+<button id="add-schedule-button">+</button>
+<script src="../static/js/Calendar.js"></script>
+</body>
+</html>

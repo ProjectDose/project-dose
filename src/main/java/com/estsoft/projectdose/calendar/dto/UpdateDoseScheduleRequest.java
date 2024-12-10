@@ -1,8 +1,11 @@
 package com.estsoft.projectdose.calendar.dto;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
+
+import org.springframework.cglib.core.Local;
 
 import com.estsoft.projectdose.users.entity.Users;
 
@@ -19,9 +22,10 @@ public class UpdateDoseScheduleRequest {
 	private String dosage;
 	private int repeatInterval;
 	private Map<String,Object> daysOfWeek;
-	private Date startDate;
+	private LocalDate startDate;
 
-	public UpdateDoseScheduleRequest(Long scheduleId,String medicationName,Map<String,Object> doseTime,String dosage,int repeatInterval,Map<String,Object> daysOfWeek,Date startDate) {
+	public UpdateDoseScheduleRequest(Long scheduleId,String medicationName,Map<String,Object> doseTime,String dosage,int repeatInterval,Map<String,Object> daysOfWeek,
+		LocalDate startDate) {
 		this.scheduleId = scheduleId;
 		this.medicationName = medicationName;
 		this.doseTime = doseTime;
