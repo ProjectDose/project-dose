@@ -30,7 +30,9 @@ import com.estsoft.projectdose.calendar.service.DoseScheduleService;
 @RestController
 @RequestMapping("/api")
 public class CallenderController {
+	@Autowired
 	private CalendarService calendarService;
+	@Autowired
 	private DoseScheduleService doseScheduleService;
 
 	@GetMapping("/")

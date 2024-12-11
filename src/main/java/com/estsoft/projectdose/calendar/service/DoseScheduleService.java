@@ -1,6 +1,7 @@
 package com.estsoft.projectdose.calendar.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,7 @@ public class DoseScheduleService {
 	public List<DoseSchedule> DoseScheduleList() throws Exception{
 		return doseScheduleRepository.findAll();
 	}
-	public DoseSchedule DoseScheduleSave(AddDoseScheduleRequest request){
-		return doseScheduleRepository.save(request.toEntity());
-	}
+
 	public void DoseScheduleDelete(Long id){
 		doseScheduleRepository.deleteById(id);
 	}
@@ -36,4 +35,21 @@ public class DoseScheduleService {
 	public DoseSchedule findByid(Long id) {
 		return doseScheduleRepository.findById(id).orElse(null);
 	}
+
+	public void saveDoseSchdule(AddDoseScheduleRequest request) {
+		validateDoseTime(request.getDoseTime());
+		DoseSchedule schedule = request.toEntity();
+		doseScheduleRepository.save(schedule);
+	}
+
+	//입력 시간 형식 검증
+	public void validateDoseTime(Map<String, Object> doseTime){
+		for(Map.Entry<String, Object> entry : doseTime.entrySet()){
+			String time = (String)entry.getValue();
+			if(!time.matches("^([01]\\d|2[0-3]):[0-5]\\d$")){
+				throw new IllegalArgumentException("시간은 HH : MM 형태로 입력해 주세요");
+			}
+		}
+	}
+
 }

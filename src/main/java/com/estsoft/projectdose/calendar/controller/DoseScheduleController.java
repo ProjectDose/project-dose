@@ -7,8 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.estsoft.projectdose.calendar.dto.AddDoseScheduleRequest;
 import com.estsoft.projectdose.calendar.dto.DoseScheduleResponse;
 import com.estsoft.projectdose.calendar.dto.DoseScheduleViewResponse;
 import com.estsoft.projectdose.calendar.entity.DoseSchedule;
@@ -41,6 +44,13 @@ public class DoseScheduleController {
 	@DeleteMapping("/DoseScheduleDelete")
 	public ResponseEntity<Void> deleteDoseSchedule(@RequestParam Long id){
 		doseScheduleService.DoseScheduleDelete(id);
+		return ResponseEntity.ok().build();
+	}
+
+	//
+	@PostMapping("/add")
+	public ResponseEntity<String> saveDoseSchedule(@RequestBody AddDoseScheduleRequest request){
+		doseScheduleService.saveDoseSchdule(request);
 		return ResponseEntity.ok().build();
 	}
 }
