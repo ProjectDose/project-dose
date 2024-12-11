@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 public class AddDoseScheduleRequest {
 	private Long scheduleId;
-	private Users user;
+	private Users users;
 	private String medicationName;
 	private Map<String,Object> doseTime;
 	private String dosage;
@@ -25,7 +25,7 @@ public class AddDoseScheduleRequest {
 	public DoseSchedule toEntity(){
 		return DoseSchedule.builder()
 			.id(scheduleId)
-			.users(user)
+			.users(users)//이후 UserService업데이트 되면 세션의 id받아올 수 있게 수정 필요
 			.medicationName(medicationName)
 			.doseTime(doseTime)
 			.dosage(dosage)

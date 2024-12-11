@@ -3,6 +3,7 @@ package com.estsoft.projectdose.calendar.entity;
 import java.time.LocalDate;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 
 import org.hibernate.annotations.Type;
@@ -48,6 +49,7 @@ public class DoseSchedule {
 	private Map<String,Object> daysOfWeek;
 
 	@Column(name = "start_date")
+	@JsonFormat(pattern="yyyy-mm-dd")
 	private LocalDate startDate;
 
 	@Builder
@@ -70,4 +72,5 @@ public class DoseSchedule {
 		this.daysOfWeek = daysOfWeek;
 		this.startDate = startDate;
 	}
+
 }
