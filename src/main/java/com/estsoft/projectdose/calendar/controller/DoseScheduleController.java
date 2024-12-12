@@ -53,7 +53,7 @@ public class DoseScheduleController {
 	}
 
 	//투약 스케쥴 삭제
-	@DeleteMapping("/api/DoseScheduleDelete")
+	@DeleteMapping("/api/dosescheduledelete")
 	public ResponseEntity<Void> deleteDoseSchedule(@RequestParam Long id){
 		doseScheduleService.DoseScheduleDelete(id);
 		return ResponseEntity.ok().build();
