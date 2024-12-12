@@ -1,6 +1,7 @@
 package com.estsoft.projectdose.calendar.entity;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,5 +31,5 @@ public class DoseLog {
 	private LocalDateTime takenTime;
 
 	@Column(name = "dose_time", nullable = false)
-	private LocalDateTime doseTime;
+	private LocalTime doseTime;
 }

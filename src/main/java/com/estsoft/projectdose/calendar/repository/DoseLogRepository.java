@@ -25,7 +25,7 @@ public interface DoseLogRepository extends JpaRepository<DoseLog, Long> {
 	@Query("""
         SELECT AVG(CASE WHEN dl.taken = true THEN 100.0 ELSE 0.0 END) as achievementRate
         FROM DoseLog dl JOIN dl.doseSchedule ds
-        WHERE ds.users.id = :userId AND dl.takenTime = :selectedDate
+        WHERE ds.users.id = :userId AND DATE(dl.takenTime) = :selectedDate
     """)
 	Double calculateDailyAchievementRate(
 		@Param("userId") Long userId,
@@ -40,10 +40,26 @@ public interface DoseLogRepository extends JpaRepository<DoseLog, Long> {
             dl.taken
         )
         FROM DoseLog dl JOIN dl.doseSchedule ds
-        WHERE ds.users.id = :userId AND dl.takenTime = :selectedDate
+        WHERE ds.users.id = :userId AND DATE(dl.takenTime) = :selectedDate
     """)
 	List<LogDetails> findDailyDoseLogs(
 		@Param("userId") Long userId,
 		@Param("selectedDate") LocalDate selectedDate
+	);
+
+	@Query("""
+        SELECT dl.takenTime,
+               ds.medicationName,
+               dl.taken
+        FROM DoseLog dl
+        JOIN dl.doseSchedule ds
+        WHERE ds.users.id = :userId
+        AND dl.takenTime BETWEEN :startDate AND :endDate
+        ORDER BY dl.takenTime, ds.medicationName
+    """)
+	List<Object[]> findDailyMedicationStatus(
+		@Param("userId") Long userId,
+		@Param("startDate") LocalDate startDate,
+		@Param("endDate") LocalDate endDate
 	);
 }

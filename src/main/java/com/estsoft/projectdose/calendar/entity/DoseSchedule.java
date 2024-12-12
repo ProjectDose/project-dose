@@ -39,4 +39,10 @@ public class DoseSchedule {
 
 	@Column(name = "is_deleted", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
 	private boolean isDeleted;
+
+	@Column(name = "repeat_interval")
+	private Integer repeatInterval;
+
+	@Column(name = "dosage")
+	private String dosage;
 }
