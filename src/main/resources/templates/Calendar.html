@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendar</title>
-    <link rel="stylesheet" href="../static/css/Calendar.css">
+    <link rel="stylesheet" th:href="@{/css/Calendar.css}">
 </head>
 <body>
 <header>
     <div class="calendar-container">
-        <div class="calendar-header" id="calendar-header">오늘: 2024-12-10</div>
+        <div class="calendar-header" id="calendar-header">오늘 : 2024-12-10</div>
         <div class="calendar" id="calendar"></div>
     </div>
 </header>
@@ -35,6 +35,6 @@
     </div>
 </main>
 <button id="add-schedule-button">+</button>
-<script src="../static/js/Calendar.js"></script>
+<script th:src="@{/js/Calendar.js}"></script>
 </body>
 </html>

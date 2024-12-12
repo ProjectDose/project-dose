@@ -22,7 +22,7 @@ public class DoseScheduleViewResponse {
 
 	public DoseScheduleViewResponse(DoseSchedule doseSchedule) {
 		this.scheduleId = doseSchedule.getScheduleId();
-		this.userId = doseSchedule.getUsers().getId();
+		this.userId = doseSchedule.getUsers().getId();//시큐리티 적용되면 수정 필요
 		this.medicationName = doseSchedule.getMedicationName();
 		this.doseTime = doseSchedule.getDoseTime();
 		this.dosage = doseSchedule.getDosage();

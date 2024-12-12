@@ -49,7 +49,7 @@ public class DoseSchedule {
 	private Map<String,Object> daysOfWeek;
 
 	@Column(name = "start_date")
-	@JsonFormat(pattern="yyyy-mm-dd")
+	@JsonFormat(shape = JsonFormat.Shape.STRING,pattern="yyyy-MM-dd")
 	private LocalDate startDate;
 
 	@Builder
