@@ -80,7 +80,7 @@ class CallenderControllerTest {
 	void findAllDoseSchedule() throws Exception{
 		final String url = "/dose";
 		final Long id = 1L;
-		final Users us
+		final Users users = new Users();
 		final String medicateionName = "a";
 		final Map<String,Object> doseTime = null;
 		final String dosage = "dosage";
@@ -89,6 +89,6 @@ class CallenderControllerTest {
 		final LocalDate startDate = LocalDate.now();
 		DoseSchedule ds = dsr.save(new DoseSchedule(id,users,medicateionName,doseTime,dosage,repeatInterval,daysOfWeek,startDate));
 
-		ResultActions result = mockMvc.perform()
+		ResultActions result = mockMvc.perform();
 	}
 }
