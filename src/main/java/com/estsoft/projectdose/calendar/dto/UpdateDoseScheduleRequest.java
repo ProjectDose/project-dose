@@ -1,13 +1,11 @@
 package com.estsoft.projectdose.calendar.dto;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.cglib.core.Local;
-
-import com.estsoft.projectdose.users.entity.Users;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +14,7 @@ import lombok.Setter;
 @Setter
 public class UpdateDoseScheduleRequest {
 	private Long scheduleId;
-	private Users users;
+	private Long userId;
 	private String medicationName;
 	private Map<String,Object> doseTime;
 	private String dosage;
@@ -27,6 +25,12 @@ public class UpdateDoseScheduleRequest {
 	public UpdateDoseScheduleRequest(Long scheduleId,String medicationName,Map<String,Object> doseTime,String dosage,int repeatInterval,Map<String,Object> daysOfWeek,
 		LocalDate startDate) {
 		this.scheduleId = scheduleId;
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+			this.userId = Long.valueOf(((UserDetails)principal).getUsername());
+		}else{
+			this.userId = Long.valueOf(principal.toString());
+		}
 		this.medicationName = medicationName;
 		this.doseTime = doseTime;
 		this.dosage = dosage;
