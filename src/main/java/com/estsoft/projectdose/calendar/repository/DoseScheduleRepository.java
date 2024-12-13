@@ -19,7 +19,7 @@ public interface DoseScheduleRepository extends JpaRepository<DoseSchedule, Long
         )
         FROM DoseSchedule ds
         WHERE ds.users.id = :userId
-        AND ds.joindate BETWEEN :startDate AND :endDate
+        AND ds.startDate BETWEEN :startDate AND :endDate
     """)
 	List<MedicationReportDto> findMedicationSchedules(
 		@Param("userId") Long userId,

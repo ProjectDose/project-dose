@@ -48,13 +48,12 @@ public interface DoseLogRepository extends JpaRepository<DoseLog, Long> {
 	);
 
 	@Query("""
-        SELECT dl.takenTime,
+        SELECT CAST(dl.takenTime AS LocalDate),
                ds.medicationName,
                dl.taken
-        FROM DoseLog dl
-        JOIN dl.doseSchedule ds
+        FROM DoseLog dl JOIN dl.doseSchedule ds
         WHERE ds.users.id = :userId
-        AND dl.takenTime BETWEEN :startDate AND :endDate
+        AND DATE(dl.takenTime) BETWEEN :startDate AND :endDate
         ORDER BY dl.takenTime, ds.medicationName
     """)
 	List<Object[]> findDailyMedicationStatus(

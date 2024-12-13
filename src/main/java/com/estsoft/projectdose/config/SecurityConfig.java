@@ -31,7 +31,7 @@ public class SecurityConfig {
 		http
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers("/api/auth/signup", "/api/auth/checkEmailDuplicate", "/api/auth/checkNicknameDuplicate").permitAll()
-				.anyRequest().authenticated()
+				.anyRequest().permitAll()
 			)
 			.formLogin(custom -> custom
 				.loginPage("/login")
@@ -57,8 +57,8 @@ public class SecurityConfig {
 	}
 
 
-	@Autowired
-	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-	}
+	// @Autowired
+	// public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+	// 	auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+	// }
 }
