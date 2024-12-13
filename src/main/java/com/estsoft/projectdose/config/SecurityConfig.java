@@ -10,7 +10,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import com.estsoft.projectdose.users.service.CustomUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Configuration
 @EnableWebSecurity
@@ -54,8 +53,11 @@ public class SecurityConfig {
 			)
 			.csrf(AbstractHttpConfigurer::disable);
 
+		http.authenticationManager(authenticationManager(http));
+
 		return http.build();
 	}
+
 	@Bean
 	public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
 		AuthenticationManagerBuilder authManagerBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
