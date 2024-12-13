@@ -44,7 +44,7 @@ dependencies {
 
     testImplementation 'org.mockito:mockito-core:5.0.0' // Mockito의 최신 버전 사용
     testImplementation 'org.mockito:mockito-inline:5.0.0' // Inline 버전도 명시적으로 추가
-    testImplementation 'net.bytebuddy:byte-buddy:1.12.22' // ByteBuddy 의존성 추가
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.0.0'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
@@ -56,13 +56,4 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-test {
-    useJUnitPlatform() // JUnit 5 사용시
-}
-
-// 'mockito' 플러그인의 mockMaker 설정을 통해 inline mockMaker를 비활성화
-test {
-    systemProperty "mockito.inline.mockMaker", "disabled"
 }

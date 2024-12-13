@@ -1,74 +1,84 @@
 package com.estsoft.projectdose.calendar.controller;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import com.estsoft.projectdose.calendar.dto.AddDoseScheduleRequest;
-import com.estsoft.projectdose.calendar.service.DoseScheduleService;
+import com.estsoft.projectdose.calendar.entity.DoseSchedule;
+import com.estsoft.projectdose.calendar.repository.DoseScheduleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class DoseScheduleControllerTest {
 	@Autowired
 	private MockMvc mockMvc;  // MockMvc를 사용하여 HTTP 요청을 테스트
-
-	@Mock
-	private DoseScheduleService doseScheduleService;  // 서비스는 Mock 객체로 주입
-
-	@InjectMocks
-	private DoseScheduleController doseScheduleController;  // Controller 객체를 테스트 대상으로 주입
-
 	@Autowired
 	private ObjectMapper objectMapper;  // JSON 변환을 위한 ObjectMapper
-
-	private AddDoseScheduleRequest request;  // 테스트할 요청 객체
+	@Autowired
+	private WebApplicationContext webApplicationContext;
+	@Autowired
+	private DoseScheduleRepository doseScheduleRepository;
 
 	@BeforeEach
-	public void setUp() {
-		// Mockito 초기화
-		MockitoAnnotations.openMocks(this);
-
-		// AddDoseScheduleRequest 객체를 초기화
-		request = new AddDoseScheduleRequest(
-			123L,
-			null, // Users 객체가 필요하다면 이 부분도 적절히 초기화
-			"Painkiller",
-			Map.of("time1", "08:00", "time2", "12:00", "time3", "18:00"),
-			"500mg",
-			1,
-			Map.of("day1", "mon", "day2", "wed", "day3", "fri"),
-			LocalDate.parse("2024-12-01")
-		);
+	public void mockMvcSetUp() {
+		this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
+		doseScheduleRepository.deleteAll();
 	}
 
+	@DisplayName("데이터 주입")
 	@Test
-	void saveDoseSchedule() throws Exception {
-		// mock 서비스를 호출하여, saveDoseSchedule 메서드가 정상적으로 호출되도록 설정
-		doNothing().when(doseScheduleService).saveDoseSchdule(any(AddDoseScheduleRequest.class));
+	void generateDoseSchedules() throws Exception {
+		//given
+		String url = "/api/generate";
+		Long scheduleId = 1L;
+		Long userId = 1L;
+		String medicationName = "a";
+		Map<String,Object> doseTime = new HashMap<>();
+		doseTime.put("1","08:00");
+		doseTime.put("2","13:00");
+		doseTime.put("3","18:00");
+		String dosage = "500mg";
+		int repeatInterval = 3;
+		Map<String, Object>daysOfWeek = new HashMap<>();
+		daysOfWeek.put("1","Monday");
+		LocalDate startDate = LocalDate.parse("2024-12-13");
+		AddDoseScheduleRequest request = new AddDoseScheduleRequest(scheduleId,userId,medicationName,doseTime,dosage,repeatInterval,daysOfWeek,startDate);
 
-		// HTTP POST 요청을 보내고 응답을 받음
-		MockHttpServletResponse response = mockMvc.perform(MockMvcRequestBuilders.post("/dose-schedule/add")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(objectMapper.writeValueAsString(request)))  // 요청 객체를 JSON 문자열로 변환
-			.andReturn().getResponse();
+		String requestBody = objectMapper.writeValueAsString(request);
 
-		// HTTP 응답 상태가 200 OK인지 확인
-		assertEquals(200, response.getStatus());
+		//when
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post(url)
+			.contentType(MediaType.APPLICATION_JSON_VALUE)
+			.content(requestBody));
 
-		// 서비스 메서드가 호출되었는지 검증
-		verify(doseScheduleService, times(1)).saveDoseSchdule(any(AddDoseScheduleRequest.class));
+		//then
+		result.andExpect(status().isCreated());
+		List<DoseSchedule> doseScheduleList = doseScheduleRepository.findAll();
+
+		assertThat(doseScheduleList.size()).isEqualTo(1);
+		assertThat(doseScheduleList.get(0).getMedicationName()).isEqualTo(medicationName);
+		assertThat(doseScheduleList.get(0).getDosage()).isEqualTo(dosage);
+		assertThat(doseScheduleList.get(0).getRepeatInterval()).isEqualTo(repeatInterval);
+		assertThat(doseScheduleList.get(0).getStartDate()).isEqualTo(startDate);
+		assertThat(doseScheduleList.get(0).getScheduleId()).isEqualTo(scheduleId);
 	}
 }
