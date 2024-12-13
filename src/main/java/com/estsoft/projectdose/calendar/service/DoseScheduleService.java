@@ -9,19 +9,25 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.estsoft.projectdose.calendar.dto.AddDoseScheduleRequest;
 import com.estsoft.projectdose.calendar.dto.UpdateDoseScheduleRequest;
 import com.estsoft.projectdose.calendar.entity.DoseSchedule;
 import com.estsoft.projectdose.calendar.repository.DoseScheduleRepository;
+import com.estsoft.projectdose.users.entity.Users;
+import com.estsoft.projectdose.users.repository.UsersRepository;
 
 @Service
 public class DoseScheduleService {
 	public final DoseScheduleRepository doseScheduleRepository;
+	private final UsersRepository usersRepository;
 
-	public DoseScheduleService(DoseScheduleRepository doseschedulerepository) {
+	public DoseScheduleService(DoseScheduleRepository doseschedulerepository, UsersRepository usersRepository) {
 		this.doseScheduleRepository = doseschedulerepository;
+		this.usersRepository = usersRepository;
 	}
 	//입력 받은 데이터를 Json 데이터들과 RepeatInterval에 따라서 input될 data형식들을 추가
 	public List<DoseSchedule> generateSchedule(DoseSchedule doseSchedule) {
@@ -84,8 +90,19 @@ public class DoseScheduleService {
 
 	public void saveDoseSchdule(AddDoseScheduleRequest request) {
 		validateDoseTime(request.getDoseTime());
-		DoseSchedule schedule = request.toEntity();
+		Long currentUserId = getCurrentUserId();
+		Users users = usersRepository.findById(currentUserId).orElseThrow(()-> new IllegalArgumentException("no such user :" + currentUserId));
+
+		DoseSchedule schedule = request.toEntity(users);
 		doseScheduleRepository.save(schedule);
+	}
+	private Long getCurrentUserId() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+			return Long.valueOf(((UserDetails) principal).getUsername());
+		} else {
+			throw new IllegalStateException("사용자 인증 정보를 찾을 수 없습니다.");
+		}
 	}
 
 	//입력 시간 형식 검증
