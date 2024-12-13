@@ -29,24 +29,26 @@ public class ReportViewController {
 	private final ReportService reportService;
 
 	@GetMapping("/statistics")
-	public String getDoseStatistics(Model model) throws JsonProcessingException {
+	public String getDoseStatistics(Model model){
 		// Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		// Users users = (Users)authentication.getPrincipal();
 
 		Map<LocalDateTime, Integer> monthlyAchievementRates =
 			reportService.getMonthlyAchievementRates(1L);
-
-		ObjectMapper objectMapper = new ObjectMapper();
-		String achievementRatesJson = objectMapper.writeValueAsString(
-			monthlyAchievementRates.entrySet().stream()
-				.collect(Collectors.toMap(
-					entry -> entry.getKey().toLocalDate().toString(),
-					Map.Entry::getValue
-				))
-		);
-
-		model.addAttribute("achievementRatesJson", achievementRatesJson);
-		return "dose-statistics";
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			String achievementRatesJson = objectMapper.writeValueAsString(
+				monthlyAchievementRates.entrySet().stream()
+					.collect(Collectors.toMap(
+						entry -> entry.getKey().toLocalDate().toString(),
+						Map.Entry::getValue
+					))
+			);
+			model.addAttribute("achievementRatesJson", achievementRatesJson);
+			return "dose-statistics";
+		} catch (JsonProcessingException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@GetMapping("/statistics/daily-details")
