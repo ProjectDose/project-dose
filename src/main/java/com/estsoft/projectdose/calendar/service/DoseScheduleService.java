@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.estsoft.projectdose.calendar.dto.AddDoseScheduleRequest;
+import com.estsoft.projectdose.calendar.dto.DoseScheduleResponse;
 import com.estsoft.projectdose.calendar.dto.UpdateDoseScheduleRequest;
 import com.estsoft.projectdose.calendar.entity.DoseSchedule;
 import com.estsoft.projectdose.calendar.repository.DoseScheduleRepository;
@@ -93,7 +94,7 @@ public class DoseScheduleService {
 		Long currentUserId = getCurrentUserId();
 		Users users = usersRepository.findById(currentUserId).orElseThrow(()-> new IllegalArgumentException("no such user :" + currentUserId));
 
-		DoseSchedule schedule = request.toEntity(users);
+		DoseSchedule schedule = request.toEntity(usersRepository);
 		doseScheduleRepository.save(schedule);
 	}
 	private Long getCurrentUserId() {
@@ -114,5 +115,9 @@ public class DoseScheduleService {
 			}
 		}
 	}
-
+	//startDate 조회 로직
+	public List<DoseScheduleResponse> findSchedulesByDate(LocalDate date){
+		List<DoseSchedule> schedules = doseScheduleRepository.findByStartDate(date);
+		return schedules.stream().map(DoseScheduleResponse::fromEntity).collect(Collectors.toList());
+	}
 }

@@ -1,0 +1,55 @@
+/* 사이드 메뉴 스타일 */
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: -250px;  /* 초기 위치를 화면 밖으로 설정 */
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    transition: right 0.3s ease;
+    z-index: 1000;
+    padding: 10px;
+}
+
+.side-menu.open {
+    right: 0;  /* 메뉴 열렸을 때 */
+}
+
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.menu-header h2 {
+    font-size: 24px;
+}
+
+.menu-header .close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.side-menu ul {
+    list-style: none;
+    padding: 0;
+}
+
+.side-menu ul li {
+    margin: 15px 0;
+}
+
+.side-menu ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.side-menu ul li a:hover {
+    text-decoration: underline;
+}

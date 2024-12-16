@@ -1,4 +1,3 @@
-// 기존 코드 유지
 const calendar = document.getElementById('calendar');
 const calendarHeader = document.getElementById('calendar-header');
 
@@ -17,7 +16,12 @@ function formatMonth(date) {
     const year = date.getFullYear();
     return `${year}-${month}`;
 }
-
+//오늘날짜 자동으로 받아오기
+document.addEventListener('DOMContentLoaded', () => {
+    const calendarHeader = document.getElementById('calendar-header');
+    const formattedDate = today.toISOString().split('T')[0];
+    calendarHeader.textContent = `오늘 : ${formattedDate}`
+})
 // 날짜 박스 생성 함수
 function createDayElement(date, showMonth = false) {
     const dayElement = document.createElement('div');
@@ -158,6 +162,15 @@ function updateScheduleTable(data) {
         scheduleContainer.appendChild(row);
     });
 }
+//새로운 데이터 입력 페이지로 이동.
+document.addEventListener('DOMContentLoaded', function () {
+    const addScheduleButton = document.getElementById('add-schedule-button');
+
+    addScheduleButton.addEventListener('click', function () {
+        // 버튼 클릭 시 newdoseschedule.html 페이지로 이동
+        window.location.href = '/newdoseschedule.html';
+    });
+});
 
 // 초기화 호출
 initializeCalendar();
