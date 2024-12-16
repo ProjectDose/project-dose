@@ -5,10 +5,11 @@ import com.estsoft.projectdose.users.dto.SignUpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import jakarta.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @Controller
-@RestController
 @RequestMapping("/api/auth")
 public class UsersController {
 
@@ -18,37 +19,36 @@ public class UsersController {
 		this.usersService = usersService;
 	}
 
+	@GetMapping("/signup")
+	public String signUpPage() {
+		return "signup";
+	}
+
 	@PostMapping("/signup")
-	public ResponseEntity<String> signUp(@RequestBody SignUpRequest signUpRequest) {
+	public ResponseEntity<String> signUp(@Valid @RequestBody SignUpRequest signUpRequest) {
 		usersService.signUp(signUpRequest);
 		return ResponseEntity.ok("회원가입 성공");
 	}
 
-	@GetMapping("/checkEmail")
-	public ResponseEntity<String> checkEmail(@RequestParam String email) {
+	@GetMapping("/checkEmailDuplicate")
+	public ResponseEntity<Map<String, String>> checkEmail(@RequestParam String email) {
+		Map<String, String> response = new HashMap<>();
 		if (usersService.checkEmail(email)) {
-			return ResponseEntity.ok("사용 가능한 이메일입니다.");
+			response.put("message", "사용 가능한 이메일입니다.");
 		} else {
-			return ResponseEntity.badRequest().body("이미 존재하는 이메일입니다.");
+			response.put("message", "이미 존재하는 이메일입니다.");
 		}
+		return ResponseEntity.ok(response);
 	}
 
-	@GetMapping("/checkNickname")
-	public ResponseEntity<String> checkNickname(@RequestParam String nickname) {
+	@GetMapping("/checkNicknameDuplicate")
+	public ResponseEntity<Map<String, String>> checkNickname(@RequestParam String nickname) {
+		Map<String, String> response = new HashMap<>();
 		if (usersService.checkNickname(nickname)) {
-			return ResponseEntity.ok("사용 가능한 닉네임입니다.");
+			response.put("message", "사용 가능한 닉네임입니다.");
 		} else {
-			return ResponseEntity.badRequest().body("중복된 닉네임입니다.");
+			response.put("message", "중복된 닉네임입니다.");
 		}
+		return ResponseEntity.ok(response);
 	}
-
-	@GetMapping("/")
-	public String mainPage() {
-		return "main"; // main.html 파일을 렌더링
-	}
-
-	// @GetMapping("/login")
-	// public String loginPage() {
-	// 	return "login"; // login.html로 이동
-	// }
 }

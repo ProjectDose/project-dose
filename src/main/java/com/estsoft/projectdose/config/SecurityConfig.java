@@ -17,11 +17,9 @@ import com.estsoft.projectdose.users.service.CustomOAuth2UserService;
 public class SecurityConfig {
 
 	private final CustomUserDetailsService userDetailsService;
-	private final CustomOAuth2UserService customOAuth2UserService;
 
-	public SecurityConfig(CustomUserDetailsService userDetailsService, CustomOAuth2UserService customOAuth2UserService) {
+	public SecurityConfig(CustomUserDetailsService userDetailsService) {
 		this.userDetailsService = userDetailsService;
-		this.customOAuth2UserService = customOAuth2UserService;
 	}
 
 	@Bean
@@ -30,36 +28,39 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
 		http
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/", "/home", "/auth/login", "/oauth2/authorization/kakao",
-					"/api/auth/signup", "/api/auth/checkEmailDuplicate", "/api/auth/checkNicknameDuplicate",
-					"/api/login", "/welcome").permitAll() // 로그인 페이지, 로그인 요청, 회원가입 페이지 접근 허용
-				.anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
+				.requestMatchers("/auth/login", "/api/auth/signup", "/api/auth/checkEmailDuplicate", "/api/auth/checkEmailDuplicate", "/error").permitAll()
+				.anyRequest().authenticated()
 			)
 			.formLogin(custom -> custom
-				.loginPage("/login") // 로그인 페이지 경로 명확히 설정 (Spring Security의 기본 경로 사용)
-				.loginProcessingUrl("/api/login") // 로그인 요청 경로 (POST 요청)
-				.defaultSuccessUrl("/home", true) // 로그인 성공 후 /home으로 이동
-				.permitAll() // 로그인 페이지는 누구나 접근 가능
+				.loginPage("/auth/login")
+				.loginProcessingUrl("/api/auth/login")
+				.usernameParameter("email")
+				.passwordParameter("password")
+				.successHandler((request, response, authentication) -> {
+					response.setContentType("application/json");
+					response.getWriter().write("{\"message\":\"로그인 성공\",\"role\":\"" + authentication.getAuthorities() + "\"}");
+				})
+				.permitAll()
 			)
 			.logout(custom -> custom
-				.logoutSuccessUrl("/") // 로그아웃 후 메인 페이지로 리디렉션
-				.logoutUrl("/api/logout")
+				.logoutSuccessUrl("/")
+				.logoutUrl("/api/auth/logout")
 				.deleteCookies("SESSION", "JSESSIONID")
 				.invalidateHttpSession(true)
 				.permitAll()
 			)
-			// .oauth2Login(oauth -> oauth
-			// 	.loginPage("/login") // 카카오 로그인 버튼이 있는 페이지
-			// 	.defaultSuccessUrl("/home", true) // 로그인 성공 후 /home으로 리디렉션
-			// 	.failureUrl("/login?error=true") // 로그인 실패시 이동 경로
-			// 	.userInfoEndpoint(userInfo ->
-			// 		userInfo.userService(customOAuth2UserService)
-			// 	)
-			// )
-			.csrf(AbstractHttpConfigurer::disable); // CSRF 비활성화 (필요에 따라 설정)
+			.oauth2Login(oauth -> oauth
+				.loginPage("/login")
+				.defaultSuccessUrl("/home", true)
+				.failureUrl("/login?error=true")
+				.userInfoEndpoint(userInfo ->
+					userInfo.userService(customOAuth2UserService)
+				)
+			)
+			.csrf(AbstractHttpConfigurer::disable);
 
 		http.authenticationManager(authenticationManager(http));
 
