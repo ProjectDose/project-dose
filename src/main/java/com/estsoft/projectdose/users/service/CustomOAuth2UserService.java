@@ -24,22 +24,18 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 	public OAuth2User loadUser(OAuth2UserRequest userRequest) {
 		OAuth2User oAuth2User = super.loadUser(userRequest);
 
-		// 카카오 사용자 정보 가져오기
 		String provider = userRequest.getClientRegistration().getRegistrationId();
 
-		// 카카오 사용자 정보는 Map 형식으로 반환됩니다.
 		Map<String, Object> kakaoAccount = (Map<String, Object>) oAuth2User.getAttribute("kakao_account");
 		Map<String, Object> properties = (Map<String, Object>) oAuth2User.getAttribute("properties");
 
 		String email = (String) kakaoAccount.get("email");
 		String nickname = (String) properties.get("nickname");
 
-		// 기존 회원 조회
 		Optional<Users> existingUser = usersRepository.findByEmail(email);
 
 		Users user;
 		if (existingUser.isEmpty()) {
-			// 신규 사용자 등록
 			user = new Users();
 			user.setEmail(email);
 			user.setNickname(nickname);
@@ -47,7 +43,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 			user.setRole(Role.ROLE_USER);
 			usersRepository.save(user);
 		} else {
-			// 기존 사용자 정보 업데이트 (선택 사항)
 			user = existingUser.get();
 		}
 
