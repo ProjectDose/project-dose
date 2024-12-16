@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.estsoft.projectdose.calendar.entity.DoseSchedule;
 import com.estsoft.projectdose.users.entity.Users;
+import com.estsoft.projectdose.users.repository.UsersRepository;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -26,8 +27,10 @@ public class AddDoseScheduleRequest {
 	private Map<String,Object> daysOfWeek;
 	private LocalDate startDate;
 
-	public DoseSchedule toEntity(Users user){
-		Long UserId = getCurrentUserId();
+	public DoseSchedule toEntity(UsersRepository usersRepository){
+		Long userId = getCurrentUserId();
+
+		Users user = usersRepository.findById(userId).orElseThrow(()->new IllegalArgumentException("사용자를 찾을수 없습니다."));
 
 		return DoseSchedule.builder()
 			.id(scheduleId)
@@ -43,7 +46,7 @@ public class AddDoseScheduleRequest {
 	private Long getCurrentUserId() {
 		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		if (principal instanceof UserDetails) {
-			return Long.valueOf(((UserDetails)principal).getUsername()); // 사용자 ID가 username으로 설정된 경우
+			return Long.valueOf(((UserDetails)principal).getUsername());
 		} else {
 			throw new IllegalStateException("사용자 인증 정보를 찾을 수 없습니다.");
 		}

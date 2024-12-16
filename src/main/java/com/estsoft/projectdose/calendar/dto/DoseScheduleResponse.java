@@ -40,4 +40,16 @@ public class DoseScheduleResponse {
 		this.daysOfWeek = doseSchedule.getDaysOfWeek();
 		this.startDate = doseSchedule.getStartDate();
 	}
+	public static DoseScheduleResponse fromEntity(DoseSchedule doseSchedule) {
+		return new DoseScheduleResponse(
+			doseSchedule.getScheduleId(),
+			doseSchedule.getUsers().getId(),
+			doseSchedule.getMedicationName(),
+			doseSchedule.getDoseTime(),
+			doseSchedule.getDosage(),
+			doseSchedule.getRepeatInterval(),
+			doseSchedule.getDaysOfWeek(),
+			doseSchedule.getStartDate()
+		);
+	}
 }
