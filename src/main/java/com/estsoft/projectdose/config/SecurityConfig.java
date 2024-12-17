@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import com.estsoft.projectdose.users.service.CustomUserDetailsService;
+import com.estsoft.projectdose.users.service.CustomOAuth2UserService;
 
 @Configuration
 @EnableWebSecurity
@@ -27,15 +28,15 @@ public class SecurityConfig {
 	}
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuth2UserService customOAuth2UserService) throws Exception {
 		http
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/api/auth/signup", "/api/auth/checkEmailDuplicate", "/api/auth/checkNicknameDuplicate").permitAll()
+				.requestMatchers("/auth/login", "/api/auth/signup", "/api/auth/checkEmailDuplicate", "/api/auth/checkEmailDuplicate", "/error").permitAll()
 				.anyRequest().authenticated()
 			)
 			.formLogin(custom -> custom
-				.loginPage("/login")
-				.loginProcessingUrl("/api/login")
+				.loginPage("/auth/login")
+				.loginProcessingUrl("/api/auth/login")
 				.usernameParameter("email")
 				.passwordParameter("password")
 				.successHandler((request, response, authentication) -> {
@@ -45,11 +46,19 @@ public class SecurityConfig {
 				.permitAll()
 			)
 			.logout(custom -> custom
-				.logoutSuccessUrl("/login")
-				.logoutUrl("/api/logout")
+				.logoutSuccessUrl("/")
+				.logoutUrl("/api/auth/logout")
 				.deleteCookies("SESSION", "JSESSIONID")
 				.invalidateHttpSession(true)
 				.permitAll()
+			)
+			.oauth2Login(oauth -> oauth
+				.loginPage("/login")
+				.defaultSuccessUrl("/home", true)
+				.failureUrl("/login?error=true")
+				.userInfoEndpoint(userInfo ->
+					userInfo.userService(customOAuth2UserService)
+				)
 			)
 			.csrf(AbstractHttpConfigurer::disable);
 
