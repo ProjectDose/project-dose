@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 안전한 임시 비밀번호 생성 함수
     function generateTemporaryPassword() {
-        const prefix = '임시';
+        const prefix = 'dose';
         const numbers = Math.floor(1000 + Math.random() * 9000); // 4자리 숫자
         const specialChars = '!@#$%^&*()';
         const specialChar = specialChars[Math.floor(Math.random() * specialChars.length)];

@@ -187,24 +187,37 @@ public class ReportService {
 		}
 	}
 
-	private String convertDayToKorean(String engDay) {
-		switch (engDay) {
-			case "MONDAY":
-				return "월";
-			case "TUESDAY":
-				return "화";
-			case "WEDNESDAY":
-				return "수";
-			case "THURSDAY":
-				return "목";
-			case "FRIDAY":
-				return "금";
-			case "SATURDAY":
-				return "토";
-			case "SUNDAY":
-				return "일";
-			default:
-				return engDay;
+	private String formatScheduleInfo(Integer repeatInterval, Map<String, Object> daysOfWeek) {
+		// repeatInterval이 null이 아니고 0보다 큰 경우
+		if (repeatInterval != null && repeatInterval > 0) {
+			return repeatInterval + "일마다";
+		}
+
+		// daysOfWeek가 null이 아닌 경우
+		if (daysOfWeek != null && !daysOfWeek.isEmpty()) {
+			// JSON 형태의 daysOfWeek를 요일로 변환
+			return daysOfWeek.values().stream()
+				.map(this::convertDayToKorean)
+				.collect(Collectors.joining(", "));
+		}
+
+		// 둘 다 null인 경우
+		return "정보 없음";
+	}
+
+	private String convertDayToKorean(Object engDay) {
+		if (engDay == null) return "";
+
+		String day = engDay.toString();
+		switch (day) {
+			case "MONDAY": return "월";
+			case "TUESDAY": return "화";
+			case "WEDNESDAY": return "수";
+			case "THURSDAY": return "목";
+			case "FRIDAY": return "금";
+			case "SATURDAY": return "토";
+			case "SUNDAY": return "일";
+			default: return day;
 		}
 	}
 

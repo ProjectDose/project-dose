@@ -26,10 +26,9 @@ public class MedicationReportDto {
 		this.repeatData = repeatData;
 	}
 
-	// JPQL에서 사용할 생성자
 	public MedicationReportDto(String medicationName, int repeatInterval,
 		String dosage,
-		Object repeatInterval2,
+		Object repeatIntervalObj,
 		Object daysOfWeek) {
 		this.medicationName = medicationName;
 		this.repeatInterval = repeatInterval;
@@ -37,9 +36,13 @@ public class MedicationReportDto {
 
 		// repeatData 맵 생성
 		this.repeatData = new HashMap<>();
-		if (repeatInterval2 != null) {
-			this.repeatData.put("repeatInterval", repeatInterval2);
+
+		// repeatInterval이 0보다 큰 경우
+		if (repeatIntervalObj != null && ((Integer)repeatIntervalObj) > 0) {
+			this.repeatData.put("repeatInterval", repeatIntervalObj);
 		}
+
+		// daysOfWeek가 null이 아닌 경우
 		if (daysOfWeek != null) {
 			this.repeatData.put("daysOfWeek", daysOfWeek);
 		}

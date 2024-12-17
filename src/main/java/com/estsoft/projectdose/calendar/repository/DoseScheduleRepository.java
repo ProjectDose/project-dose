@@ -13,13 +13,13 @@ import com.estsoft.projectdose.report.dto.MedicationReportDto;
 public interface DoseScheduleRepository extends JpaRepository<DoseSchedule, Long> {
 	@Query("SELECT new com.estsoft.projectdose.report.dto.MedicationReportDto(" +
 		"ds.medicationName, " +
-		"ds.repeatInterval, " +
+		"COALESCE(ds.repeatInterval, 0), " +
 		"ds.dosage, " +
-		"CASE WHEN ds.repeatInterval > 0 THEN ds.repeatInterval ELSE null END, " +
+		"ds.repeatInterval, " +
 		"ds.daysOfWeek) " +
 		"FROM DoseSchedule ds " +
 		"WHERE ds.users.id = :userId " +
-		"AND (DATE(ds.startDate) BETWEEN :startDate AND :endDate)")
+		"AND (ds.startDate BETWEEN :startDate AND :endDate)")
 	List<MedicationReportDto> findMedicationSchedules(
 		@Param("userId") Long userId,
 		@Param("startDate") LocalDate startDate,
