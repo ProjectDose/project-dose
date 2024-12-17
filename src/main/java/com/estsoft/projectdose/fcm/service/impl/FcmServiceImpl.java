@@ -39,7 +39,7 @@ public class FcmServiceImpl implements FcmService {
 
 		HttpEntity<String> entity = new HttpEntity<>(message, headers);
 
-		String API_URL = "https://fcm.googleapis.com/v1/projects/project-dose/messages:send";
+		String API_URL = "https://fcm.googleapis.com/v1/projects/project-dose-f2bab/messages:send";
 		ResponseEntity<String> response = null;
 		try {
 			restTemplate.exchange(API_URL, HttpMethod.POST, entity, String.class);
@@ -54,11 +54,11 @@ public class FcmServiceImpl implements FcmService {
 	}
 
 	private String getAccessToken() throws IOException {
-		String firebaseConfigPath = "firebase/firebase-key.json";
+		// String firebaseConfigPath = "firebase/firebase-key.json";
 
 		GoogleCredentials googleCredentials = GoogleCredentials
-			.fromStream(new ClassPathResource(firebaseConfigPath).getInputStream())
-			.createScoped(List.of("<https://www.googleapis.com/auth/cloud-platform>"));
+			.fromStream(new ClassPathResource("firebase/firebase-key.json").getInputStream())
+			.createScoped(List.of("https://www.googleapis.com/auth/firebase.messaging"));
 
 		googleCredentials.refreshIfExpired();
 		return googleCredentials.getAccessToken().getTokenValue();

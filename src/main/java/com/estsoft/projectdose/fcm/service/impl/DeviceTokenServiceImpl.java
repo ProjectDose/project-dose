@@ -1,5 +1,6 @@
 package com.estsoft.projectdose.fcm.service.impl;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import com.estsoft.projectdose.fcm.dto.DeviceTokenDto;
@@ -18,16 +19,17 @@ public class DeviceTokenServiceImpl implements DeviceTokenService {
 	@Override
 	public boolean registerDeviceToken(DeviceTokenDto deviceTokenDto) {
 		// UUID 자동 생성
-		String generatedToken = UUID.randomUUID().toString();
+		Optional<DeviceToken> existingToken = deviceTokenRepository.findByToken(deviceTokenDto.getToken());
 
-		// 토큰 설정 (기존 값이 없는 경우)
-		String token = deviceTokenDto.getToken() != null
-			? deviceTokenDto.getToken()
-			: generatedToken;
+		// 이미 등록된 토큰이면 처리 종료
+		if (existingToken.isPresent()) {
+			System.out.println("이미 등록된 FCM 토큰입니다.");
+			return false;
+		}
 
 		DeviceToken deviceToken = DeviceToken.builder()
 			.userId(deviceTokenDto.getUserId())
-			.token(token)
+			.token(deviceTokenDto.getToken())
 			.build();
 
 		deviceTokenRepository.save(deviceToken);
