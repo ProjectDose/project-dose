@@ -32,21 +32,16 @@ public class UsersService {
 		this.mailSender = mailSender;
 	}
 
-	// 회원가입 메서드
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
-
-		// 이메일 중복 체크
-		if (!checkEmail(signUpRequest.getEmail())) {
+		if (!usersRepository.findByEmail(signUpRequest.getEmail()).isEmpty()) {
 			throw new RuntimeException("이미 존재하는 이메일입니다.");
 		}
 
-		// 닉네임 중복 체크
-		if (!checkNickname(signUpRequest.getNickname())) {
+		if (!usersRepository.findByNickname(signUpRequest.getNickname()).isEmpty()) {
 			throw new RuntimeException("중복된 닉네임입니다.");
 		}
 
-		// 새 사용자 생성
 		Users user = new Users();
 		user.setEmail(signUpRequest.getEmail());
 		user.setPassword(passwordEncoder.encode(signUpRequest.getPassword()));
@@ -56,34 +51,29 @@ public class UsersService {
 		user.setDeleted(false);
 		user.setRole(Role.ROLE_USER);
 
-		// DB에 저장
 		usersRepository.save(user);
 	}
 
-	// 이메일 중복 체크 메서드
 	public boolean checkEmail(String email) {
-		return usersRepository.findByEmail(email).isEmpty(); // 이메일이 존재하지 않으면 true 반환
+		return usersRepository.findByEmail(email).isEmpty();
 	}
 
-	// 닉네임 중복 체크 메서드
 	public boolean checkNickname(String nickname) {
-		return usersRepository.findByNickname(nickname).isEmpty(); // 닉네임이 존재하지 않으면 true 반환
+		return usersRepository.findByNickname(nickname).isEmpty();
 	}
 
-	// 비밀번호 찾기 (이메일 전송 기능 추가됨)
 	@Transactional
 	public void findPassword(PasswordFindRequest passwordFindRequest) {
 		Users user = usersRepository.findByEmail(passwordFindRequest.getEmail())
 			.orElseThrow(() -> new RuntimeException("가입된 이메일이 아닙니다."));
 
 		String token = UUID.randomUUID().toString();
-		LocalDateTime expiryTime = LocalDateTime.now().plusHours(1); // 1시간 만료 시간 설정
+		LocalDateTime expiryTime = LocalDateTime.now().plusHours(1);
 
 		user.setResetToken(token);
 		user.setResetTokenExpiry(expiryTime);
 		usersRepository.save(user);
 
-		// 이메일 전송 기능 추가
 		String resetLink = "http://project-dose.com/reset-password?token=" + token;
 		String emailBody = "<h1>비밀번호 재설정 요청</h1>"
 			+ "<p>아래 링크를 클릭하여 비밀번호를 재설정하세요. 링크는 1시간 동안 유효합니다:</p>"
@@ -96,7 +86,6 @@ public class UsersService {
 		}
 	}
 
-	// 이메일 전송 메서드 추가
 	private void sendEmail(String to, String subject, String body) throws MessagingException {
 		MimeMessage message = mailSender.createMimeMessage();
 		MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -108,7 +97,6 @@ public class UsersService {
 		mailSender.send(message);
 	}
 
-	// 비밀번호 재설정
 	@Transactional
 	public void resetPassword(PasswordResetRequest passwordResetRequest) {
 		Users user = usersRepository.findByResetToken(passwordResetRequest.getToken())

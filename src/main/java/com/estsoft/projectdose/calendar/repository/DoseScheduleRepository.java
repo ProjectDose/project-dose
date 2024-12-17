@@ -11,6 +11,9 @@ import com.estsoft.projectdose.calendar.entity.DoseSchedule;
 import com.estsoft.projectdose.report.dto.MedicationReportDto;
 
 public interface DoseScheduleRepository extends JpaRepository<DoseSchedule, Long> {
+	//날짜로 찾기 투약 스케쥴 찾기
+	List<DoseSchedule> findByStartDate(LocalDate startDate);
+
 	@Query("SELECT new com.estsoft.projectdose.report.dto.MedicationReportDto(" +
 		"ds.medicationName, " +
 		"COALESCE(ds.repeatInterval, 0), " +

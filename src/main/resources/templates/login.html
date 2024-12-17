@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>로그인</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/login.css">
+</head>
+<body>
+
+<div class="container">
+    <h1 class="text-center mb-4">로그인</h1>
+
+    <div th:if="${session.errorMessage}" class="alert alert-danger text-center" role="alert">
+        [[${session.errorMessage}]]
+    </div>
+
+    <form th:action="@{/auth/login}" method="post">
+        <div class="mb-3">
+            <label for="email" class="form-label">이메일</label>
+            <input type="email" class="form-control" id="email" name="email" placeholder="이메일 입력" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">비밀번호</label>
+            <input type="password" class="form-control" id="password" name="password" placeholder="비밀번호 입력" required>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <input type="checkbox" id="keepLoggedIn" name="keepLoggedIn">
+                <label for="keepLoggedIn" class="form-label mb-0">로그인 유지</label>
+            </div>
+            <a href="javascript:void(0);" onclick="openPasswordResetModal()" class="text-primary">비밀번호를 잊으셨나요?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">로그인</button>
+    </form>
+
+    <a th:href="@{/oauth2/authorization/kakao}" class="btn btn-warning w-100 mt-3">
+        <img src="https://developers.kakao.com/assets/img/about/logos/kakaologin/logo/kakaologin_btn_medium.png"
+             alt="카카오 로그인" style="height: 24px; vertical-align: middle; margin-right: 8px;">
+    </a>
+
+    <a th:href="@{/api/auth/signup}" class="btn btn-success w-100 mt-2">회원가입</a>
+</div>
+
+<div class="modal fade" id="passwordResetModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">비밀번호 찾기</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>이메일을 입력하면 비밀번호 재설정 링크를 보내드립니다.</p>
+                <input type="email" id="resetEmail" class="form-control" placeholder="이메일 입력" required>
+                <div id="resetMessage" class="text-danger mt-2" style="display:none;"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+                <button type="button" class="btn btn-primary" onclick="sendPasswordReset()">전송</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/login.js"></script>
+
+</body>
+</html>

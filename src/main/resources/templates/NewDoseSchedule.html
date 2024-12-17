@@ -2,9 +2,63 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>데이터 입력</title>
+    <link rel="stylesheet" href="styles.css"> <!-- 선택 사항: 스타일 추가 -->
 </head>
 <body>
 
+<h1>데이터 입력</h1>
+
+<!-- 데이터 입력 폼 -->
+<form id="dataForm">
+    <!-- 투약 시간 입력 필드 -->
+    <div id="doseTimeFields">
+        <div class="doseTimeField">
+            <label for="doseTime1">투약 시간 1:</label>
+            <input type="time" id="doseTime1" name="doseTime[1]" required>
+        </div>
+    </div>
+    <button type="button" id="addDoseTimeButton">투약 시간 추가</button>
+
+    <!-- 요일 입력 필드 -->
+    <div id="daysOfWeekFields">
+        <div class="daysOfWeekField">
+            <label for="daysOfWeek1">요일 1:</label>
+            <select id="daysOfWeek1" name="daysOfWeek[1]" required>
+                <option value="MONDAY">월요일</option>
+                <option value="TUESDAY">화요일</option>
+                <option value="WEDNESDAY">수요일</option>
+                <option value="THURSDAY">목요일</option>
+                <option value="FRIDAY">금요일</option>
+                <option value="SATURDAY">토요일</option>
+                <option value="SUNDAY">일요일</option>
+            </select>
+        </div>
+    </div>
+    <button type="button" id="addDaysOfWeekButton">요일 추가</button>
+
+    <!-- 나머지 폼 항목 -->
+    <div>
+        <label for="medicationName">약물명:</label>
+        <input type="text" id="medicationName" name="medicationName" required>
+    </div>
+    <div>
+        <label for="dosage">용량:</label>
+        <input type="text" id="dosage" name="dosage" required>
+    </div>
+    <div>
+        <label for="repeatInterval">반복 간격:</label>
+        <input type="number" id="repeatInterval" name="repeatInterval" required>
+    </div>
+    <div>
+        <label for="startDate">시작일:</label>
+        <input type="date" id="startDate" name="startDate" required>
+    </div>
+
+    <button type="submit">전송</button>
+</form>
+
+<script src="NewDoseSchedule.js"></script>
 </body>
 </html>
