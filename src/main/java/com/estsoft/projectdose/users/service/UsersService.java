@@ -34,12 +34,11 @@ public class UsersService {
 
 	@Transactional
 	public void signUp(SignUpRequest signUpRequest) {
-
-		if (!checkEmail(signUpRequest.getEmail())) {
+		if (!usersRepository.findByEmail(signUpRequest.getEmail()).isEmpty()) {
 			throw new RuntimeException("이미 존재하는 이메일입니다.");
 		}
 
-		if (!checkNickname(signUpRequest.getNickname())) {
+		if (!usersRepository.findByNickname(signUpRequest.getNickname()).isEmpty()) {
 			throw new RuntimeException("중복된 닉네임입니다.");
 		}
 
@@ -69,7 +68,7 @@ public class UsersService {
 			.orElseThrow(() -> new RuntimeException("가입된 이메일이 아닙니다."));
 
 		String token = UUID.randomUUID().toString();
-		LocalDateTime expiryTime = LocalDateTime.now().plusHours(1); // 1시간 만료 시간 설정
+		LocalDateTime expiryTime = LocalDateTime.now().plusHours(1);
 
 		user.setResetToken(token);
 		user.setResetTokenExpiry(expiryTime);

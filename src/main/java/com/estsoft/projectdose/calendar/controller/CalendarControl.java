@@ -8,6 +8,11 @@ public class CalendarControl {
 	//메인페이지 이동
 	@GetMapping("/")
 	public String home() {
-		return "Calendar";
+		return "calendar";
+	}
+
+	@GetMapping("/home")
+	public String homePage() {
+		return "redirect:/";
 	}
 }
