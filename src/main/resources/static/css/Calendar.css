@@ -104,6 +104,88 @@ body{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 100;
 }
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+/* 여기서 부터는 사이드 메뉴 관련 스타일 */
+/* 메뉴 버튼 스타일 */
+.menu-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 20px;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+/* 사이드 메뉴 초기 스타일 (숨김 상태) */
+.side-menu {
+    position: fixed;
+    top: 0;
+    right: -300px; /* 화면 밖으로 밀어냄 */
+    width: 300px;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s ease-in-out; /* 부드러운 슬라이드 효과 */
+    z-index: 999;
+}
+
+/* 메뉴 내용 스타일 */
+.side-menu ul {
+    list-style: none;
+    padding: 20px;
+    margin: 0;
+}
+
+.side-menu ul li {
+    margin: 15px 0;
+}
+
+.side-menu ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s;
+}
+
+.side-menu ul li a:hover {
+    color: #007bff;
+}
+
+/* 메뉴 헤더 */
+.menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #444;
+    color: white;
+    border-bottom: 1px solid #555;
+}
+
+/* 닫기 버튼 스타일 */
+.close-button {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* 메뉴 활성화 상태 */
+.side-menu.open {
+    right: 0;
+}
+/* 사이드 메뉴 스타일 끝*/
+/* 여기서 부터는 스케쥴 추가 관련*/
 #dose-schedule{
 
 }

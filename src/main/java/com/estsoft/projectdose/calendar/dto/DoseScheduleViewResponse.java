@@ -3,6 +3,9 @@ package com.estsoft.projectdose.calendar.dto;
 import java.time.LocalDate;
 import java.util.Map;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.estsoft.projectdose.calendar.entity.DoseSchedule;
 
 import lombok.Getter;
@@ -22,7 +25,12 @@ public class DoseScheduleViewResponse {
 
 	public DoseScheduleViewResponse(DoseSchedule doseSchedule) {
 		this.scheduleId = doseSchedule.getScheduleId();
-		this.userId = doseSchedule.getUsers().getId();//시큐리티 적용되면 수정 필요
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		if (principal instanceof UserDetails) {
+			this.userId = Long.valueOf(((UserDetails)principal).getUsername());
+		}else{
+			this.userId = Long.valueOf(principal.toString());
+		}
 		this.medicationName = doseSchedule.getMedicationName();
 		this.doseTime = doseSchedule.getDoseTime();
 		this.dosage = doseSchedule.getDosage();
