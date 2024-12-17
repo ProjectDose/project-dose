@@ -34,28 +34,27 @@ public interface DoseLogRepository extends JpaRepository<DoseLog, Long> {
 
 
 	@Query("""
-        SELECT new com.estsoft.projectdose.report.dto.LogDetails(
-            ds.medicationName,
-            dl.doseTime,
-            dl.taken
-        )
-        FROM DoseLog dl JOIN dl.doseSchedule ds
-        WHERE ds.users.id = :userId AND DATE(dl.takenTime) = :selectedDate
-    """)
+		    SELECT new com.estsoft.projectdose.report.dto.LogDetails(
+		        ds.medicationName,
+		        CAST(dl.takenTime AS LocalTime),
+		        dl.doseTime,
+		        dl.taken
+		    )
+		    FROM DoseLog dl JOIN dl.doseSchedule ds
+		    WHERE ds.users.id = :userId AND DATE(dl.takenTime) = :selectedDate
+		""")
 	List<LogDetails> findDailyDoseLogs(
 		@Param("userId") Long userId,
 		@Param("selectedDate") LocalDate selectedDate
 	);
 
-	@Query("""
-        SELECT CAST(dl.takenTime AS LocalDate),
-               ds.medicationName,
-               dl.taken
-        FROM DoseLog dl JOIN dl.doseSchedule ds
-        WHERE ds.users.id = :userId
-        AND DATE(dl.takenTime) BETWEEN :startDate AND :endDate
-        ORDER BY dl.takenTime, ds.medicationName
-    """)
+	@Query("SELECT DATE(dl.takenTime), ds.medicationName, " +
+		"CASE WHEN COUNT(CASE WHEN dl.taken = false THEN 1 END) = 0 THEN true ELSE false END " +
+		"FROM DoseLog dl " +
+		"JOIN dl.doseSchedule ds " +
+		"WHERE ds.users.id = :userId " +
+		"AND DATE(dl.takenTime) BETWEEN :startDate AND :endDate " +
+		"GROUP BY DATE(dl.takenTime), ds.medicationName")
 	List<Object[]> findDailyMedicationStatus(
 		@Param("userId") Long userId,
 		@Param("startDate") LocalDate startDate,

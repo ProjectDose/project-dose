@@ -10,6 +10,7 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class LogDetails {
 	private String medicationName;
+	private LocalTime takenTime;
 	private LocalTime doseTime; // localTime -> localDateTime 변경
 	private Boolean taken;
 }

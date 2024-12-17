@@ -13,7 +13,5 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
 	Optional<Users> findByEmail(String email);
 	Optional<Users> findByNickname(String nickname);
 	Optional<Users> findByResetToken(String resetToken);
-	List<Users> findByNicknameContaining(String nickname);
-	List<Users> findByNameContaining(String name);
 	Page<Users> findByNicknameContainingOrNameContaining(String nickname, String name, Pageable pageable);
 }

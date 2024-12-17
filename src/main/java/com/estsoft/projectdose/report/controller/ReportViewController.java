@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.estsoft.projectdose.report.dto.DailyStatisticsResponse;
 import com.estsoft.projectdose.report.service.ReportService;
-import com.estsoft.projectdose.users.entity.Users;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -45,7 +42,7 @@ public class ReportViewController {
 					))
 			);
 			model.addAttribute("achievementRatesJson", achievementRatesJson);
-			return "dose-statistics";
+			return "doseStatistics";
 		} catch (JsonProcessingException e) {
 			throw new RuntimeException(e);
 		}
@@ -60,7 +57,7 @@ public class ReportViewController {
 			reportService.getDailyStatistics(1L, selectedDate);
 
 		model.addAttribute("dailyStatistics", dailyStatistics);
-		return "dose-daily-details";
+		return "doseDailyDetails";
 	}
 
 }
