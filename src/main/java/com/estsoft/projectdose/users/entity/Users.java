@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "users") //추가
 public class Users {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
