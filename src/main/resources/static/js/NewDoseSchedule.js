@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // fetch를 사용하여 서버로 POST 요청 보내기
-        fetch('/api/submit', {
+        fetch('/api/newdoseschedule', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
