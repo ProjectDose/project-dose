@@ -1,11 +1,14 @@
 package com.estsoft.projectdose.calendar.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,6 +19,7 @@ import com.estsoft.projectdose.calendar.dto.DoseScheduleResponse;
 import com.estsoft.projectdose.calendar.dto.DoseScheduleViewResponse;
 import com.estsoft.projectdose.calendar.entity.DoseSchedule;
 import com.estsoft.projectdose.calendar.service.DoseScheduleService;
+import com.google.common.annotations.GwtCompatible;
 
 //투약 스케쥴을 달력에 저장/삭제 하기 위한 컨트롤러
 @RestController
@@ -47,6 +51,7 @@ public class DoseScheduleController {
 		}
 		return "Calendar";
 	}
+	//스케쥴 생성
 	@PostMapping("/api/generate")
 	public List<DoseSchedule> generateSchedules(@RequestBody DoseSchedule doseSchedule) {
 		return doseScheduleService.generateSchedule(doseSchedule);
@@ -64,5 +69,11 @@ public class DoseScheduleController {
 	public ResponseEntity<String> saveDoseSchedule(@RequestBody AddDoseScheduleRequest request){
 		doseScheduleService.saveDoseSchdule(request);
 		return ResponseEntity.ok().build();
+	}
+	//특정날짜 선택시 스케쥴 조회
+	@GetMapping("/api/Schedules/{startDate}")
+	public ResponseEntity<List<DoseScheduleResponse>> getSchedulesByDate(@PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate){
+		List<DoseScheduleResponse> schedules = doseScheduleService.findSchedulesByDate(startDate);
+		return ResponseEntity.ok(schedules);
 	}
 }
