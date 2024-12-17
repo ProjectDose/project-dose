@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>회원가입</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/signup.css}">
+</head>
+<body>
+<div class="container">
+  <div class="form-container">
+    <h2 class="text-center mb-4">회원가입</h2>
+
+    <script th:if="${successMessage != null}" th:inline="javascript">
+      alert('[[${successMessage}]]');
+      window.location.href = '/auth/login';
+    </script>
+
+    <form id="signupForm" th:action="@{/api/auth/signup}" method="post">
+
+      <div class="mb-3">
+        <label for="name" class="form-label">이름</label>
+        <input type="text" id="name" name="name" class="form-control" placeholder="이름을 입력해주세요" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="nickname" class="form-label">닉네임</label>
+        <div class="d-flex">
+          <input type="text" id="nickname" name="nickname" class="form-control me-2" placeholder="닉네임 입력" required>
+          <button type="button" id="checkNicknameButton" class="btn btn-primary">중복 확인</button>
+        </div>
+        <div id="nicknameMessage" class="info-message"></div>
+      </div>
+
+      <div class="mb-3">
+        <label for="email" class="form-label">이메일</label>
+        <div class="d-flex">
+          <input type="email" id="email" name="email" class="form-control me-2" placeholder="이메일 입력" required>
+          <button type="button" id="checkEmailButton" class="btn btn-primary">중복 확인</button>
+        </div>
+        <div id="emailMessage" class="info-message"></div>
+      </div>
+
+      <div class="mb-3">
+        <label for="password" class="form-label">비밀번호</label>
+        <input type="password" id="password" name="password" class="form-control" placeholder="비밀번호 입력" required>
+        <div id="passwordRuleMessage" class="info-message rule" style="display: none;">
+          특수문자, 대문자, 소문자 포함 6~20자리를 입력해주세요.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="passwordConfirm" class="form-label">비밀번호 확인</label>
+        <input type="password" id="passwordConfirm" class="form-control" placeholder="비밀번호 확인 입력" required>
+        <div id="passwordMessage" class="info-message"></div>
+      </div>
+
+      <div class="d-grid">
+        <button type="submit" id="signupButton" class="btn btn-success">회원가입</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script th:src="@{/js/signup.js}"></script>
+</body>
+</html>
