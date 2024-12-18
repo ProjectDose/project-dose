@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     addScheduleButton.addEventListener('click', function () {
         // 버튼 클릭 시 newdoseschedule.html 페이지로 이동
-        window.location.href = '/NewDoseSchedule';
+        window.location.href = '/newdoseschedule.html';
     });
 });
 

@@ -15,9 +15,4 @@ public class CalendarControl {
 	public String homePage() {
 		return "redirect:/";
 	}
-
-	@GetMapping("/NewDoseSchedule")
-	public String newDoseSchedule() {
-		return "NewDoseSchedule";
-	}
 }
