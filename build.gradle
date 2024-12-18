@@ -58,8 +58,6 @@ dependencies {
     implementation 'ch.qos.logback:logback-classic:1.4.7'
     implementation 'org.springframework.boot:spring-boot-starter-mail:3.4.0'
 
-    implementation 'com.itextpdf:itext7-core:7.2.5'
-
     //테스트 관련 의존성
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.assertj:assertj-core:3.24.2'

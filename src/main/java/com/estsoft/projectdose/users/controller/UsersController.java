@@ -11,7 +11,6 @@ import org.springframework.web.servlet.ModelAndView;
 import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-import com.estsoft.projectdose.users.entity.Users;
 
 @Controller
 @RequestMapping("/api/auth")
@@ -57,47 +56,15 @@ public class UsersController {
 		}
 		return ResponseEntity.ok(response);
 	}
-
 	@PostMapping("/findPassword")
 	public ResponseEntity<String> findPassword(@RequestBody PasswordFindRequest passwordFindRequest) {
 		usersService.findPassword(passwordFindRequest);
 		return ResponseEntity.ok("비밀번호 재설정 이메일이 전송되었습니다.");
 	}
 
-	@GetMapping({"/reset-password", "/api/auth/reset-password"})
-	public ModelAndView showResetPasswordPage(@RequestParam("token") String token) {
-		ModelAndView mav = new ModelAndView("reset-password");
-
-		boolean isValidToken = usersService.validateResetToken(token);
-		if (!isValidToken) {
-			mav.setViewName("error");
-			mav.addObject("errorMessage", "유효하지 않거나 만료된 링크입니다.");
-			return mav;
-		}
-
-		mav.addObject("token", token);
-		return mav;
-	}
-
 	@PostMapping("/resetPassword")
-	public ModelAndView resetPassword(@Valid @ModelAttribute PasswordResetRequest passwordResetRequest) {
-		ModelAndView mav = new ModelAndView();
-		try {
-			Users user = usersService.findUserByResetToken(passwordResetRequest.getToken());
-
-			if (usersService.isSameAsOldPassword(user, passwordResetRequest.getNewPassword())) {
-				mav.setViewName("reset-password");
-				mav.addObject("errorMessage", "이전에 설정한 비밀번호입니다.");
-				return mav;
-			}
-
-			usersService.resetPassword(passwordResetRequest);
-			mav.setViewName("reset-password-success");
-			mav.addObject("successMessage", "비밀번호가 변경되었습니다.");
-		} catch (RuntimeException e) {
-			mav.setViewName("error");
-			mav.addObject("errorMessage", e.getMessage());
-		}
-		return mav;
+	public ResponseEntity<String> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest) {
+		usersService.resetPassword(passwordResetRequest);
+		return ResponseEntity.ok("비밀번호가 성공적으로 재설정되었습니다.");
 	}
 }

@@ -39,4 +39,3 @@ out/
 # Local DB Configuration
 application-local.properties.env
 application.properties
-src/main/resources/firebase/firebase-key.json

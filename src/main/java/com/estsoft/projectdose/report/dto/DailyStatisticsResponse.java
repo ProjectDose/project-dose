@@ -7,6 +7,6 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class DailyStatisticsResponse {
-	private Double AchievementRate;
+	private Double overallAchievementRate;
 	private List<LogDetails> doseLogDetails;
 }

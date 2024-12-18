@@ -25,7 +25,7 @@ public interface DoseLogRepository extends JpaRepository<DoseLog, Long> {
 	@Query("""
         SELECT AVG(CASE WHEN dl.taken = true THEN 100.0 ELSE 0.0 END) as achievementRate
         FROM DoseLog dl JOIN dl.doseSchedule ds
-        WHERE ds.users.id = :userId AND DATE(dl.takenTime) = :selectedDate
+        WHERE ds.users.id = :userId AND dl.takenTime = :selectedDate
     """)
 	Double calculateDailyAchievementRate(
 		@Param("userId") Long userId,
@@ -34,30 +34,16 @@ public interface DoseLogRepository extends JpaRepository<DoseLog, Long> {
 
 
 	@Query("""
-		    SELECT new com.estsoft.projectdose.report.dto.LogDetails(
-		        ds.medicationName,
-		        CAST(dl.takenTime AS LocalTime),
-		        dl.doseTime,
-		        dl.taken
-		    )
-		    FROM DoseLog dl JOIN dl.doseSchedule ds
-		    WHERE ds.users.id = :userId AND DATE(dl.takenTime) = :selectedDate
-		""")
+        SELECT new com.estsoft.projectdose.report.dto.LogDetails(
+            ds.medicationName,
+            dl.doseTime,
+            dl.taken
+        )
+        FROM DoseLog dl JOIN dl.doseSchedule ds
+        WHERE ds.users.id = :userId AND dl.takenTime = :selectedDate
+    """)
 	List<LogDetails> findDailyDoseLogs(
 		@Param("userId") Long userId,
 		@Param("selectedDate") LocalDate selectedDate
-	);
-
-	@Query("SELECT DATE(dl.takenTime), ds.medicationName, " +
-		"CASE WHEN COUNT(CASE WHEN dl.taken = false THEN 1 END) = 0 THEN true ELSE false END " +
-		"FROM DoseLog dl " +
-		"JOIN dl.doseSchedule ds " +
-		"WHERE ds.users.id = :userId " +
-		"AND DATE(dl.takenTime) BETWEEN :startDate AND :endDate " +
-		"GROUP BY DATE(dl.takenTime), ds.medicationName")
-	List<Object[]> findDailyMedicationStatus(
-		@Param("userId") Long userId,
-		@Param("startDate") LocalDate startDate,
-		@Param("endDate") LocalDate endDate
 	);
 }
