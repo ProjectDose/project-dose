@@ -45,4 +45,7 @@ public class Users {
 
 	@Column(name = "reset_token_expiry") // 추가: 토큰 만료 시간 필드
 	private LocalDateTime resetTokenExpiry;
+
+	@Column(nullable = true)
+	private String deviceToken;
 }
