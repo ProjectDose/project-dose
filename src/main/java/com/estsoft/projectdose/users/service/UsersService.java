@@ -11,6 +11,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -18,6 +19,7 @@ import jakarta.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.Map;
 
 @Service
 public class UsersService {
@@ -62,6 +64,9 @@ public class UsersService {
 		return usersRepository.findByNickname(nickname).isEmpty();
 	}
 
+	@Value("${BASE_URL}")
+	private String baseUrl;
+
 	@Transactional
 	public void findPassword(PasswordFindRequest passwordFindRequest) {
 		Users user = usersRepository.findByEmail(passwordFindRequest.getEmail())
@@ -74,7 +79,8 @@ public class UsersService {
 		user.setResetTokenExpiry(expiryTime);
 		usersRepository.save(user);
 
-		String resetLink = "http://project-dose.com/reset-password?token=" + token;
+		String resetLink = baseUrl + "/api/auth/reset-password?token=" + token;
+
 		String emailBody = "<h1>비밀번호 재설정 요청</h1>"
 			+ "<p>아래 링크를 클릭하여 비밀번호를 재설정하세요. 링크는 1시간 동안 유효합니다:</p>"
 			+ "<a href=\"" + resetLink + "\">비밀번호 재설정 링크</a>";
@@ -110,5 +116,86 @@ public class UsersService {
 		user.setResetToken(null);
 		user.setResetTokenExpiry(null);
 		usersRepository.save(user);
+	}
+	@Transactional
+	public boolean validateResetToken(String token) {
+		return usersRepository.findByResetToken(token)
+			.map(user -> {
+				if (user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+					return false;
+				}
+				return true;
+			})
+			.orElse(false);
+	}
+
+	public Users findUserByResetToken(String token) {
+		return usersRepository.findByResetToken(token)
+			.orElseThrow(() -> new RuntimeException("유효하지 않은 토큰입니다."));
+	}
+
+	public boolean isSameAsOldPassword(Users user, String newPassword) {
+		return passwordEncoder.matches(newPassword, user.getPassword());
+	}
+
+	public Users findUserByEmail(String email) {
+		if (email == null || email.isBlank()) {
+			throw new RuntimeException("이메일이 누락되었습니다.");
+		}
+		return usersRepository.findByEmail(email)
+			.orElseThrow(() -> new RuntimeException("이메일로 사용자를 찾을 수 없습니다: " + email));
+	}
+
+	@Transactional
+	public void updateUser(Long userId, Map<String, String> updates) {
+		Users user = usersRepository.findById(userId)
+			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+		if (updates.containsKey("nickname")) {
+			String newNickname = updates.get("nickname");
+
+			if (user.getNickname().equals(newNickname)) {
+				throw new RuntimeException("이미 설정한 닉네임입니다.");
+			}
+
+			if (usersRepository.findByNickname(newNickname).isPresent()) {
+				throw new RuntimeException("존재하는 닉네임입니다.");
+			}
+
+			user.setNickname(newNickname);
+		}
+
+		if (updates.containsKey("currentPassword") && updates.containsKey("newPassword")) {
+			String currentPassword = updates.get("currentPassword");
+			String newPassword = updates.get("newPassword");
+
+			if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
+				throw new RuntimeException("현재 비밀번호가 일치하지 않습니다.");
+			}
+
+			if (!newPassword.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)[A-Za-z\\d\\W]{6,20}$")) {
+				throw new RuntimeException("특수문자, 대문자, 소문자 포함 6~20자리를 입력해주세요.");
+			}
+
+			if (passwordEncoder.matches(newPassword, user.getPassword())) {
+				throw new RuntimeException("이전에 사용한 비밀번호와 동일합니다.");
+			}
+
+			user.setPassword(passwordEncoder.encode(newPassword));
+		}
+
+		usersRepository.save(user);
+	}
+
+	@Transactional
+	public void deleteUser(Long userId) {
+		Users user = usersRepository.findById(userId)
+			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+		usersRepository.delete(user);
+	}
+
+	public Users findUserById(Long userId) {
+		return usersRepository.findById(userId)
+			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다. ID: " + userId));
 	}
 }

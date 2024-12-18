@@ -38,4 +38,3 @@ out/
 
 # Local DB Configuration
 application-local.properties.env
-application.properties
