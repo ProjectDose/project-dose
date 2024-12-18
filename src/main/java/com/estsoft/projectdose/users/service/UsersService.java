@@ -117,7 +117,6 @@ public class UsersService {
 		user.setResetTokenExpiry(null);
 		usersRepository.save(user);
 	}
-
 	@Transactional
 	public boolean validateResetToken(String token) {
 		return usersRepository.findByResetToken(token)

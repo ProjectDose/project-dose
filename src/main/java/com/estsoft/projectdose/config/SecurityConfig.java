@@ -34,7 +34,7 @@ public class SecurityConfig {
 					"/css/**", "/js/**", "/images/**", "/static/**",
 					"/auth/**", "/oauth2/**", "/api/auth/**", "/error", "/favicon.ico"
 				).permitAll()
-				.anyRequest().authenticated()
+				.anyRequest().permitAll()
 			)
 			.formLogin(form -> form
 				.loginPage("/auth/login")
