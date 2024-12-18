@@ -16,9 +16,6 @@ public class SecurityConfig {
 	private final CustomUserDetailsService userDetailsService;
 	private final CustomOAuth2UserService customOAuth2UserService;
 
-	/**
-	 * CustomUserDetailsService와 CustomOAuth2UserService를 생성자 주입으로 받아옵니다.
-	 */
 	public SecurityConfig(CustomUserDetailsService userDetailsService, CustomOAuth2UserService customOAuth2UserService) {
 		this.userDetailsService = userDetailsService;
 		this.customOAuth2UserService = customOAuth2UserService;

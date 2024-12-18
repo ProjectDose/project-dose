@@ -1,0 +1,64 @@
+/* 전체 배경 및 레이아웃 */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background: #f4f4f9;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.input-field {
+    width: 90%;
+    padding: 15px;
+    margin: 15px auto;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: block;
+}
+
+.btn {
+    display: block;
+    width: 90%;
+    margin: 15px auto;
+    padding: 15px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* 왼쪽 화살표 버튼 */
+.back-arrow {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 24px;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.back-arrow:hover {
+    color: #0056b3;
+}

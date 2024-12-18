@@ -1,17 +1,4 @@
-body {
-    background-color: #f4f4f9;
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-.form-container {
-    max-width: 500px;
-    margin: 30px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
+/* signup.css */
 .info-message {
     font-size: 0.9rem;
     margin-top: 5px;
@@ -27,4 +14,34 @@ body {
 
 .info-message.rule {
     color: gray;
+}
+
+body {
+    background-color: #f4f4f9;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.form-container {
+    max-width: 500px;
+    margin: 30px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* 버튼의 white-space와 padding, width 조정 */
+.btn-primary {
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    padding: 8px 12px;   /* 버튼 안의 padding 조절 */
+    font-size: 14px;     /* 글자 크기 조절 */
+    min-width: 100px;    /* 버튼의 최소 너비 설정 */
+}
+
+.d-flex .form-control {
+    flex-grow: 1;        /* 입력 필드가 가능한 최대 크기 차지 */
+}
+
+.d-flex .btn-primary {
+    flex-shrink: 0;      /* 버튼의 크기 고정 */
 }
