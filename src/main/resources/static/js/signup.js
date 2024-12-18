@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordMessage = document.getElementById('passwordMessage');
     const passwordRuleMessage = document.getElementById('passwordRuleMessage');
 
+    const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{6,20}$/;
+
     document.getElementById('checkNicknameButton').addEventListener('click', () => {
         const nickname = nicknameInput.value.trim();
         if (!nickname) {
@@ -40,16 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     });
 
-    // 비밀번호 규칙 표시
-    passwordInput.addEventListener('focus', () => {
-        passwordRuleMessage.style.display = 'block';
-    });
+    function checkPasswordRule() {
+        const password = passwordInput.value;
 
-    passwordInput.addEventListener('blur', () => {
-        passwordRuleMessage.style.display = 'none';
-    });
+        if (passwordPattern.test(password)) {
+            passwordRuleMessage.textContent = '';
+        } else {
+            passwordRuleMessage.textContent = '특수문자, 대문자, 소문자 포함 6~20자리를 입력해주세요.';
+        }
+    }
 
-    // 비밀번호 확인
     function checkPasswordMatch() {
         const password = passwordInput.value;
         const confirmPassword = passwordConfirmInput.value;
@@ -63,6 +65,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    passwordInput.addEventListener('input', checkPasswordRule);
     passwordInput.addEventListener('input', checkPasswordMatch);
     passwordConfirmInput.addEventListener('input', checkPasswordMatch);
+
+    document.getElementById('signupForm').addEventListener('submit', (event) => {
+        const password = passwordInput.value;
+        const confirmPassword = passwordConfirmInput.value;
+
+        if (!passwordPattern.test(password)) {
+            alert('비밀번호는 특수문자, 대문자, 소문자 포함 6~20자리를 입력해야 합니다.');
+            event.preventDefault();
+        }
+
+        if (password !== confirmPassword) {
+            alert('비밀번호가 일치하지 않습니다.');
+            event.preventDefault();
+        }
+    });
 });
