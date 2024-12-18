@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordMessage = document.getElementById('passwordMessage');
     const passwordRuleMessage = document.getElementById('passwordRuleMessage');
 
+    // 🔥 비밀번호 규칙 검사 정규식
     const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[A-Za-z\d\W]{6,20}$/;
 
     function checkPasswordRule() {

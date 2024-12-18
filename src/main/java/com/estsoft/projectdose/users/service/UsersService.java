@@ -19,7 +19,6 @@ import jakarta.mail.internet.MimeMessage;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 import java.util.UUID;
-import java.util.Map;
 
 @Service
 public class UsersService {
@@ -128,7 +127,6 @@ public class UsersService {
 			})
 			.orElse(false);
 	}
-
 	public Users findUserByResetToken(String token) {
 		return usersRepository.findByResetToken(token)
 			.orElseThrow(() -> new RuntimeException("유효하지 않은 토큰입니다."));
@@ -138,64 +136,4 @@ public class UsersService {
 		return passwordEncoder.matches(newPassword, user.getPassword());
 	}
 
-	public Users findUserByEmail(String email) {
-		if (email == null || email.isBlank()) {
-			throw new RuntimeException("이메일이 누락되었습니다.");
-		}
-		return usersRepository.findByEmail(email)
-			.orElseThrow(() -> new RuntimeException("이메일로 사용자를 찾을 수 없습니다: " + email));
-	}
-
-	@Transactional
-	public void updateUser(Long userId, Map<String, String> updates) {
-		Users user = usersRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-
-		if (updates.containsKey("nickname")) {
-			String newNickname = updates.get("nickname");
-
-			if (user.getNickname().equals(newNickname)) {
-				throw new RuntimeException("이미 설정한 닉네임입니다.");
-			}
-
-			if (usersRepository.findByNickname(newNickname).isPresent()) {
-				throw new RuntimeException("존재하는 닉네임입니다.");
-			}
-
-			user.setNickname(newNickname);
-		}
-
-		if (updates.containsKey("currentPassword") && updates.containsKey("newPassword")) {
-			String currentPassword = updates.get("currentPassword");
-			String newPassword = updates.get("newPassword");
-
-			if (!passwordEncoder.matches(currentPassword, user.getPassword())) {
-				throw new RuntimeException("현재 비밀번호가 일치하지 않습니다.");
-			}
-
-			if (!newPassword.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W)[A-Za-z\\d\\W]{6,20}$")) {
-				throw new RuntimeException("특수문자, 대문자, 소문자 포함 6~20자리를 입력해주세요.");
-			}
-
-			if (passwordEncoder.matches(newPassword, user.getPassword())) {
-				throw new RuntimeException("이전에 사용한 비밀번호와 동일합니다.");
-			}
-
-			user.setPassword(passwordEncoder.encode(newPassword));
-		}
-
-		usersRepository.save(user);
-	}
-
-	@Transactional
-	public void deleteUser(Long userId) {
-		Users user = usersRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-		usersRepository.delete(user);
-	}
-
-	public Users findUserById(Long userId) {
-		return usersRepository.findById(userId)
-			.orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다. ID: " + userId));
-	}
 }

@@ -5,52 +5,106 @@ on:
     branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
+  workflow_dispatch:
+
+env:
+  S3_BUCKET_NAME: ppiyak-bucket
+  AWS_REGION: ap-northeast-2
+  CODEDEPLOY_NAME: github-actions
+  CODEDEPLOY_GROUP: ppiyak-github-actions-group
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     permissions:
       contents: read
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - uses: actions/checkout@v4
 
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
 
-    - name: Grant execute permission for gradlew
-      run: chmod +x ./gradlew 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
 
-    - name: Build with Gradle Wrapper
-      run: ./gradlew build
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
 
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: Package
-        path: build/libs
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
+      - name: Retrieve Secrets from AWS Secrets Manager
+        id: retrieve-secrets
+        run: |
+          echo "Fetching secrets from AWS Secrets Manager..."
+          SECRETS=$(aws secretsmanager get-secret-value --secret-id project-dose-variables --query SecretString --output text)
+          
+          # 디버깅: 전체 시크릿 출력
+          echo "Full Secrets JSON: $SECRETS"
+          
+          # 출력을 GitHub Actions 출력으로 저장
+          echo "EMAIL_USERNAME=$(echo "$SECRETS" | jq -r '.EMAIL_USERNAME // empty')" >> $GITHUB_OUTPUT
+          echo "EMAIL_PASSWORD=$(echo "$SECRETS" | jq -r '.EMAIL_PASSWORD // empty')" >> $GITHUB_OUTPUT
+          echo "DB_PASSWORD=$(echo "$SECRETS" | jq -r '.DB_PASSWORD // empty')" >> $GITHUB_OUTPUT
+          echo "DB_USERNAME=$(echo "$SECRETS" | jq -r '.DB_USERNAME // empty')" >> $GITHUB_OUTPUT
+          echo "KAKAO_CLIENT_ID=$(echo "$SECRETS" | jq -r '.KAKAO_CLIENT_ID // empty')" >> $GITHUB_OUTPUT
+          echo "KAKAO_CLIENT_SECRET=$(echo "$SECRETS" | jq -r '.KAKAO_CLIENT_SECRET // empty')" >> $GITHUB_OUTPUT
+          
+          # 디버깅: 키 존재 여부 확인
+          echo "DB_USERNAME key exists: $(echo "$SECRETS" | jq 'has("DB_USERNAME")')"
+          echo "DB_PASSWORD key exists: $(echo "$SECRETS" | jq 'has("DB_PASSWORD")')"
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ env.AWS_REGION }}
 
+      - name: Build with Gradle Wrapper
+        run: ./gradlew build
+        env:
+          EMAIL_USERNAME: ${{ steps.retrieve-secrets.outputs.EMAIL_USERNAME }}
+          EMAIL_PASSWORD: ${{ steps.retrieve-secrets.outputs.EMAIL_PASSWORD }}
+          DB_USERNAME: ${{ steps.retrieve-secrets.outputs.DB_USERNAME }}
+          DB_PASSWORD: ${{ steps.retrieve-secrets.outputs.DB_PASSWORD }}
+          KAKAO_CLIENT_ID: ${{ steps.retrieve-secrets.outputs.KAKAO_CLIENT_ID }}
+          KAKAO_CLIENT_SECRET: ${{ steps.retrieve-secrets.outputs.KAKAO_CLIENT_SECRET }}
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Package
+          path: build/libs
+
+      - name: Make zip file
+        run: zip -r ./$GITHUB_SHA.zip .
+        shell: bash
+
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://$S3_BUCKET_NAME/$GITHUB_SHA.zip
+
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name $CODEDEPLOY_NAME --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name $CODEDEPLOY_GROUP --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
 
   dependency-submission:
-
     runs-on: ubuntu-latest
     permissions:
       contents: write
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        java-version: '17'
-        distribution: 'temurin'
+      - uses: actions/checkout@v4
 
-    - name: Generate and submit dependency graph
-      uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Generate and submit dependency graph
+        uses: gradle/actions/dependency-submission@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
