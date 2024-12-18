@@ -8,6 +8,9 @@ import com.estsoft.projectdose.users.entity.Role;
 import com.estsoft.projectdose.users.repository.UsersRepository;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -116,6 +119,7 @@ public class UsersService {
 		user.setResetTokenExpiry(null);
 		usersRepository.save(user);
 	}
+
 	@Transactional
 	public boolean validateResetToken(String token) {
 		return usersRepository.findByResetToken(token)
@@ -127,6 +131,7 @@ public class UsersService {
 			})
 			.orElse(false);
 	}
+
 	public Users findUserByResetToken(String token) {
 		return usersRepository.findByResetToken(token)
 			.orElseThrow(() -> new RuntimeException("유효하지 않은 토큰입니다."));
@@ -136,4 +141,23 @@ public class UsersService {
 		return passwordEncoder.matches(newPassword, user.getPassword());
 	}
 
+	public Long getLoggedInUserId() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		if (authentication != null && authentication.isAuthenticated()) {
+			Object principal = authentication.getPrincipal();
+			String email = null;
+			if (principal instanceof UserDetails) {
+				email = ((UserDetails)principal).getUsername();
+			} else if (principal instanceof String) {
+				email = principal.toString();
+			}
+			if (email != null) {
+				return usersRepository.findByEmail(email)
+					.map(Users::getId)
+					.orElseThrow(() -> new IllegalStateException("유효하지 않은 계정입니다."));
+			}
+		}
+		throw new IllegalStateException("해당 유저 없음");
+	}
 }

@@ -9,29 +9,39 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.estsoft.projectdose.calendar.dto.AddDoseScheduleRequest;
 import com.estsoft.projectdose.calendar.dto.DoseScheduleResponse;
 import com.estsoft.projectdose.calendar.dto.UpdateDoseScheduleRequest;
 import com.estsoft.projectdose.calendar.entity.DoseSchedule;
 import com.estsoft.projectdose.calendar.repository.DoseScheduleRepository;
 import com.estsoft.projectdose.users.entity.Users;
 import com.estsoft.projectdose.users.repository.UsersRepository;
+import com.estsoft.projectdose.users.service.UsersService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class DoseScheduleService {
-	public final DoseScheduleRepository doseScheduleRepository;
+	private final DoseScheduleRepository doseScheduleRepository;
 	private final UsersRepository usersRepository;
-
-	public DoseScheduleService(DoseScheduleRepository doseschedulerepository, UsersRepository usersRepository) {
+	private final UsersService usersService;
+	@Autowired
+	public DoseScheduleService(DoseScheduleRepository doseschedulerepository, UsersRepository usersRepository,
+		UsersService usersService) {
 		this.doseScheduleRepository = doseschedulerepository;
 		this.usersRepository = usersRepository;
+		this.usersService = usersService;
 	}
 	//입력 받은 데이터를 Json 데이터들과 RepeatInterval에 따라서 input될 data형식들을 추가
 	public List<DoseSchedule> generateSchedule(DoseSchedule doseSchedule) {
+		Long userId = usersService.getLoggedInUserId(); // 로그인된 사용자의 userId 가져오기
+		Users user = usersRepository.findById(userId)
+			.orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
+		doseSchedule.setUsers(user); // 사용자 설정
 		List<DoseSchedule> schedules = new ArrayList<>();
 		LocalDate startDate = doseSchedule.getStartDate();
 		int repeatInterval = doseSchedule.getRepeatInterval();
@@ -69,7 +79,7 @@ public class DoseScheduleService {
 			currentDate = currentDate.plusDays(1);
 			daysProcessed++;
 		}
-		return schedules;
+		return doseScheduleRepository.saveAll(schedules);
 	}
 	public List<DoseSchedule> findAll(){
 		return doseScheduleRepository.findAll();
@@ -78,46 +88,33 @@ public class DoseScheduleService {
 		doseScheduleRepository.deleteById(id);
 	}
 	public DoseSchedule update(Long id,UpdateDoseScheduleRequest request){
-		DoseSchedule doseSchedule = doseScheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("no such dose schedule :" + id));
+		DoseSchedule doseSchedule = doseScheduleRepository.findById(id).orElseThrow(()-> new IllegalArgumentException("해당 스케쥴이 없습니다 ."));
 
-		doseSchedule.update(request.getScheduleId(), request.getMedicationName(), request.getDoseTime(),
-					request.getDosage(), request.getStartDate(), request.getRepeatInterval(), request.getDaysOfWeek());
-		return doseSchedule;
-	}
-
-	public DoseSchedule findByid(Long id) {
-		return doseScheduleRepository.findById(id).orElse(null);
-	}
-
-	public void saveDoseSchdule(AddDoseScheduleRequest request) {
-		validateDoseTime(request.getDoseTime());
-		Long currentUserId = getCurrentUserId();
-		Users users = usersRepository.findById(currentUserId).orElseThrow(()-> new IllegalArgumentException("no such user :" + currentUserId));
-
-		DoseSchedule schedule = request.toEntity(usersRepository);
-		doseScheduleRepository.save(schedule);
-	}
-	private Long getCurrentUserId() {
-		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if (principal instanceof UserDetails) {
-			return Long.valueOf(((UserDetails) principal).getUsername());
-		} else {
-			throw new IllegalStateException("사용자 인증 정보를 찾을 수 없습니다.");
-		}
-	}
-
-	//입력 시간 형식 검증
-	public void validateDoseTime(Map<String, Object> doseTime){
-		for(Map.Entry<String, Object> entry : doseTime.entrySet()){
-			String time = (String)entry.getValue();
-			if(!time.matches("^([01]\\d|2[0-3]):[0-5]\\d$")){
-				throw new IllegalArgumentException("시간은 HH : MM 형태로 입력해 주세요");
+		ObjectMapper objectMapper = new ObjectMapper();
+		// 수정할 데이터가 있으면 업데이트
+		if (request.getDoseTime() != null) {
+			try{
+				String doseTimeStr = request.getDoseTime();
+				String wrappedJson = String.format("{\"time\": \"%s\"}", doseTimeStr);
+				Map<String, Object> doseTimeMap = objectMapper.readValue(wrappedJson, new TypeReference<>() {});
+				doseSchedule.setDoseTime(doseTimeMap);
+			}catch (JsonProcessingException e){
+				throw new IllegalArgumentException("옳지 않은 형식입니다.",e);
 			}
 		}
+		if (request.getMedicationName() != null) {
+			doseSchedule.setMedicationName(request.getMedicationName());
+		}
+		if (request.getDosage() != null) {
+			doseSchedule.setDosage(request.getDosage());
+		}
+
+		// 데이터 저장
+		return doseScheduleRepository.save(doseSchedule);
 	}
-	//startDate 조회 로직
-	public List<DoseScheduleResponse> findSchedulesByDate(LocalDate date){
-		List<DoseSchedule> schedules = doseScheduleRepository.findByStartDate(date);
+	//startDate로 조회하는 로직
+	public List<DoseScheduleResponse> findSchedulesByDateAndUserId(LocalDate date, Long userId){
+		List<DoseSchedule> schedules = doseScheduleRepository.findByStartDateAndUsers_Id(date, userId);
 		return schedules.stream().map(DoseScheduleResponse::fromEntity).collect(Collectors.toList());
 	}
 }
