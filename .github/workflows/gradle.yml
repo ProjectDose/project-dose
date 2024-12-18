@@ -5,6 +5,7 @@ on:
     branches: [ "develop" ]
   pull_request:
     branches: [ "develop" ]
+  workflow_dispatch:
 
 env:
   S3_BUCKET_NAME: ppiyak-bucket
@@ -58,9 +59,8 @@ jobs:
 
     - name: Code Deploy
       run: aws deploy create-deployment --application-name $CODEDEPLOY_NAME --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name $CODEDEPLOY_GROUP --s3-location bucket=$S3_BUCKET_NAME,bundleType=zip,key=$GITHUB_SHA.zip
-
+ 
   dependency-submission:
-
     runs-on: ubuntu-latest
     permissions:
       contents: write
