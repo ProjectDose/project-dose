@@ -27,17 +27,14 @@ public class ReportViewController {
 
 	@GetMapping("/statistics")
 	public String getDoseStatistics(Model model){
-		// Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		// Users users = (Users)authentication.getPrincipal();
-
 		Map<LocalDateTime, Integer> monthlyAchievementRates =
-			reportService.getMonthlyAchievementRates(1L);
+			reportService.getMonthlyAchievementRates();
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			String achievementRatesJson = objectMapper.writeValueAsString(
 				monthlyAchievementRates.entrySet().stream()
 					.collect(Collectors.toMap(
-						entry -> entry.getKey().toLocalDate().toString(),
+						entry -> entry.getKey().toString(),  // LocalDate.toString() 사용
 						Map.Entry::getValue
 					))
 			);
@@ -50,11 +47,9 @@ public class ReportViewController {
 
 	@GetMapping("/statistics/daily-details")
 	public String getDailyStatistics(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate selectedDate, Model model) {
-		// Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		// Users users = (Users)authentication.getPrincipal();
 
 		DailyStatisticsResponse dailyStatistics =
-			reportService.getDailyStatistics(1L, selectedDate);
+			reportService.getDailyStatistics(selectedDate);
 
 		model.addAttribute("dailyStatistics", dailyStatistics);
 		return "doseDailyDetails";

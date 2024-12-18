@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.estsoft.projectdose.calendar.repository.DoseLogRepository;
@@ -19,6 +21,8 @@ import com.estsoft.projectdose.report.dto.DailyStatisticsResponse;
 import com.estsoft.projectdose.report.dto.LogDetails;
 import com.estsoft.projectdose.report.dto.MedicationReportDto;
 
+import com.estsoft.projectdose.users.entity.Users;
+import com.estsoft.projectdose.users.repository.UsersRepository;
 import com.itextpdf.io.font.PdfEncodings;
 import com.itextpdf.kernel.colors.DeviceRgb;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -43,28 +47,44 @@ import lombok.RequiredArgsConstructor;
 public class ReportService {
 	private final DoseLogRepository doseLogRepository;
 	private final DoseScheduleRepository doseScheduleRepository;
+	private final UsersRepository usersRepository;
 	private final JavaMailSender mailSender;
 
-	public Map<LocalDateTime, Integer> getMonthlyAchievementRates(Long userId) {
-		List<Object[]> achievementRates = doseLogRepository.findMonthlyAchievementRates(userId);
+	public Map<LocalDateTime, Integer> getMonthlyAchievementRates() {
+		List<Object[]> achievementRates = doseLogRepository.findMonthlyAchievementRates(findUserIdByEmail());
 
 		return achievementRates.stream()
+			.collect(Collectors.groupingBy(
+				result -> ((LocalDateTime)result[0]).toLocalDate(),  // 날짜만 추출
+				Collectors.collectingAndThen(
+					Collectors.toList(),
+					list -> {
+						// 평균 달성률 계산
+						double avgRate = list.stream()
+							.mapToInt(result -> ((Number)result[1]).intValue())
+							.average()
+							.orElse(0.0);
+
+						return (int)Math.round(avgRate);
+					}
+				)
+			))
+			.entrySet().stream()
 			.collect(Collectors.toMap(
-				result -> (LocalDateTime)result[0],  // 날짜
-				result -> ((Number)result[1]).intValue()  // 달성률
+				entry -> entry.getKey().atStartOfDay(),  // LocalDate를 LocalDateTime으로 변환
+				Map.Entry::getValue
 			));
 	}
 
-	public DailyStatisticsResponse getDailyStatistics(Long userId, LocalDate selectedDate) {
+	public DailyStatisticsResponse getDailyStatistics(LocalDate selectedDate) {
 
-		Double achievementRate = doseLogRepository.calculateDailyAchievementRate(userId, selectedDate);
-		List<LogDetails> doseLogDetails = doseLogRepository.findDailyDoseLogs(userId, selectedDate);
+		Double achievementRate = doseLogRepository.calculateDailyAchievementRate(findUserIdByEmail(), selectedDate);
+		List<LogDetails> doseLogDetails = doseLogRepository.findDailyDoseLogs(findUserIdByEmail(), selectedDate);
 
 		return new DailyStatisticsResponse(achievementRate, doseLogDetails);
 	}
 
-
-	public byte[] generateMedicationReport(Long userId, LocalDate startDate, LocalDate endDate) {
+	public byte[] generateMedicationReport(LocalDate startDate, LocalDate endDate) {
 		try (ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			PdfWriter writer = new PdfWriter(baos);
 			PdfDocument pdf = new PdfDocument(writer);
@@ -92,7 +112,7 @@ public class ReportService {
 
 			// 약 스케줄 테이블
 			List<MedicationReportDto> medicationSchedules =
-				doseScheduleRepository.findMedicationSchedules(userId, startDate, endDate);
+				doseScheduleRepository.findMedicationSchedules(findUserIdByEmail(), startDate, endDate);
 
 			Table scheduleTable = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
 			scheduleTable.setFont(koFont);
@@ -113,7 +133,7 @@ public class ReportService {
 				if (repeatData.containsKey("repeatInterval") && repeatData.get("repeatInterval") != null) {
 					scheduleInfo = schedule.getRepeatInterval() + "일마다";
 				} else if (repeatData.containsKey("daysOfWeek") && repeatData.get("daysOfWeek") != null) {
-					Map<String, String> daysMap = (Map<String, String>) repeatData.get("daysOfWeek");
+					Map<String, String> daysMap = (Map<String, String>)repeatData.get("daysOfWeek");
 					scheduleInfo = daysMap.values().stream()
 						.map(this::convertDayToKorean)
 						.collect(Collectors.joining(", "));
@@ -131,7 +151,7 @@ public class ReportService {
 
 			// 일일 복용 현황 테이블
 			List<Object[]> dailyMedicationStatus =
-				doseLogRepository.findDailyMedicationStatus(userId, startDate, endDate);
+				doseLogRepository.findDailyMedicationStatus(findUserIdByEmail(), startDate, endDate);
 
 			Table dailyStatusTable = new Table(UnitValue.createPercentArray(3)).useAllAvailableWidth();
 			dailyStatusTable.setFont(koFont);
@@ -149,9 +169,9 @@ public class ReportService {
 			for (Object[] status : dailyMedicationStatus) {
 				LocalDate date;
 				if (status[0] instanceof java.sql.Date) {
-					date = ((java.sql.Date) status[0]).toLocalDate();
+					date = ((java.sql.Date)status[0]).toLocalDate();
 				} else if (status[0] instanceof LocalDate) {
-					date = (LocalDate) status[0];
+					date = (LocalDate)status[0];
 				} else {
 					continue;
 				}
@@ -174,7 +194,6 @@ public class ReportService {
 				dailyStatusTable.addCell(isTaken ? "복용 완료" : "미복용");
 			}
 
-
 			document.add(new Paragraph("일일 복용 현황")
 				.setFontSize(16)
 				.setFontColor(new DeviceRgb(0, 0, 128)));
@@ -187,51 +206,41 @@ public class ReportService {
 		}
 	}
 
-	private String formatScheduleInfo(Integer repeatInterval, Map<String, Object> daysOfWeek) {
-		// repeatInterval이 null이 아니고 0보다 큰 경우
-		if (repeatInterval != null && repeatInterval > 0) {
-			return repeatInterval + "일마다";
-		}
-
-		// daysOfWeek가 null이 아닌 경우
-		if (daysOfWeek != null && !daysOfWeek.isEmpty()) {
-			// JSON 형태의 daysOfWeek를 요일로 변환
-			return daysOfWeek.values().stream()
-				.map(this::convertDayToKorean)
-				.collect(Collectors.joining(", "));
-		}
-
-		// 둘 다 null인 경우
-		return "정보 없음";
-	}
-
 	private String convertDayToKorean(Object engDay) {
-		if (engDay == null) return "";
+		if (engDay == null)
+			return "";
 
 		String day = engDay.toString();
 		switch (day) {
-			case "MONDAY": return "월";
-			case "TUESDAY": return "화";
-			case "WEDNESDAY": return "수";
-			case "THURSDAY": return "목";
-			case "FRIDAY": return "금";
-			case "SATURDAY": return "토";
-			case "SUNDAY": return "일";
-			default: return day;
+			case "MONDAY":
+				return "월";
+			case "TUESDAY":
+				return "화";
+			case "WEDNESDAY":
+				return "수";
+			case "THURSDAY":
+				return "목";
+			case "FRIDAY":
+				return "금";
+			case "SATURDAY":
+				return "토";
+			case "SUNDAY":
+				return "일";
+			default:
+				return day;
 		}
 	}
 
-	public void sendPdfReportByEmail(Long userId, LocalDate startDate, LocalDate endDate) {
+	public void sendPdfReportByEmail(LocalDate startDate, LocalDate endDate) {
 		try {
-			byte[] pdfContent = generateMedicationReport(userId, startDate, endDate);
+			byte[] pdfContent = generateMedicationReport(startDate, endDate);
 
-			// // 사용자 이메일 조회
-			// String userEmail = getUserEmail(userId);
+			Users users = usersRepository.findById(findUserIdByEmail()).orElseThrow();
 
 			MimeMessage message = mailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-			helper.setTo("arc552@naver.com");
+			helper.setTo(users.getEmail());
 			helper.setSubject("삐약이에서 발송한 투약 통계 보고서 입니다.");
 			helper.setText("첨부된 PDF 파일을 확인해 주세요.");
 
@@ -241,6 +250,17 @@ public class ReportService {
 			mailSender.send(message);
 		} catch (MessagingException e) {
 			throw new RuntimeException("이메일 전송 중 오류 발생", e);
+		}
+	}
+
+	public Long findUserIdByEmail() {
+		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		Long id;
+		if (principal instanceof UserDetails) {
+			Users users = usersRepository.findByEmail(((UserDetails)principal).getUsername()).orElseThrow();
+			return users.getId();
+		} else {
+			throw new IllegalStateException("사용자 인증 정보를 찾을 수 없습니다.");
 		}
 	}
 

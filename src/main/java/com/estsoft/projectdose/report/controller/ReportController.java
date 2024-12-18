@@ -7,6 +7,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.estsoft.projectdose.report.service.ReportService;
+import com.estsoft.projectdose.users.entity.Users;
+import com.estsoft.projectdose.users.service.CustomUserDetailsService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,16 +29,14 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/report")
 public class ReportController {
 	private final ReportService reportService;
+	private final CustomUserDetailsService userDetailsService;
 
 	@GetMapping("/pdf")
 	public ResponseEntity<byte[]> generatePdfReport(
 		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
 		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
 	) {
-		// Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		// Users users = (Users)authentication.getPrincipal();
-
-		byte[] pdfContent = reportService.generateMedicationReport(1L, startDate, endDate);
+		byte[] pdfContent = reportService.generateMedicationReport(startDate, endDate);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_PDF);
@@ -47,10 +51,7 @@ public class ReportController {
 		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
 		@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate
 	) {
-		// Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		// Users users = (Users)authentication.getPrincipal();
-
-		reportService.sendPdfReportByEmail(1L, startDate, endDate);
+		reportService.sendPdfReportByEmail(startDate, endDate);
 		return ResponseEntity.ok("보고서가 이메일로 전송되었습니다.");
 	}
 
