@@ -27,7 +27,9 @@ function createDayElement(date, showMonth = false) {
     const dayElement = document.createElement('div');
     dayElement.className = 'day';
     dayElement.textContent = formatDay(date);
-    dayElement.setAttribute('data-date', date.toISOString());
+    // 로컬 시간대를 기준으로 날짜를 설정
+    const localDateString = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    dayElement.setAttribute('data-date', localDateString);
 
     if (showMonth) {
         const monthElement = document.createElement('div');
@@ -97,35 +99,34 @@ function handleScroll() {
     }
 }
 
-// 새로 추가한 코드 통합
 calendar.addEventListener('click', (event) => {
     const target = event.target;
 
-    // 클릭한 요소가 .day 클래스인지 확인
     if (target.classList.contains('day')) {
-        // 이전에 선택된 날짜에서 'selected' 클래스 제거
         const previouslySelected = document.querySelector('.day.selected');
         if (previouslySelected) {
             previouslySelected.classList.remove('selected');
         }
 
-        // 현재 클릭된 날짜에 'selected' 클래스 추가
         target.classList.add('selected');
 
-        // 새로 추가된 스케줄 요청 및 업데이트 로직
+        // 선택된 날짜 가져오기
         const clickedDate = target.getAttribute('data-date');
         if (!clickedDate) return;
 
-        // 선택된 날짜로 헤더 업데이트
-        calendarHeader.textContent = `선택된 날짜: ${clickedDate.split('T')[0]}`;
+        // 헤더 업데이트 (로컬 시간대 기준으로 날짜 표시)
+        calendarHeader.textContent = `선택된 날짜: ${clickedDate}`;
 
         // 서버에서 해당 날짜의 데이터 가져오기
-        fetch(`/api/schedule?date=${clickedDate.split('T')[0]}`)
+        fetch(`/api/Schedules/${clickedDate}`)
             .then((response) => {
                 if (!response.ok) throw new Error("데이터 요청 실패");
                 return response.json();
             })
-            .then((data) => updateScheduleTable(data)) // 테이블 업데이트
+            .then((data) => {
+                console.log(data); // 서버에서 받은 데이터를 콘솔에 출력하여 확인
+                updateScheduleTable(data);
+            })
             .catch((error) => console.error("Error fetching schedule:", error));
     }
 });
@@ -136,10 +137,10 @@ function updateScheduleTable(data) {
     scheduleContainer.innerHTML = `
         <tr>
             <th>시간</th>
+            <th>약물명</th>
             <th>용량</th>
-            <th>반복 간격</th>
             <th>요일</th>
-            <th>시작일</th>
+            <th>수정/삭제</th>
         </tr>
     `;
 
@@ -153,13 +154,77 @@ function updateScheduleTable(data) {
     data.forEach((item) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-            <td>${item.doseTime}</td>
-            <td>${item.dosage}</td>
-            <td>${item.repeatInterval}</td>
+            <td class = "doseTime">${item.doseTime}</td>
+            <td class = "medicationName">${item.medicationName}</td>
+            <td class = "dosage">${item.dosage}</td>
             <td>${item.daysOfWeek}</td>
-            <td>${item.startDate}</td>
+            <td>
+                <button class="edit-btn">수정</button>
+                <button class="delete-btn">삭제</button>
+            </td>
         `;
         scheduleContainer.appendChild(row);
+        //삭제 로직
+        row.querySelector('.delete-btn').addEventListener('click', () => {
+            fetch(`/api/doseschedule/delete/${item.scheduleId}`, {
+                method: 'DELETE',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("삭제 완료");
+                        row.remove();
+                        location.reload()
+                    } else {
+                        console.error("삭제 오류");
+                    }
+                })
+                .catch(error => console.error("삭제 오류", error));
+            console.log("삭제 버튼 클릭", item);
+        });
+
+        //수정로직
+        row.querySelector(`.edit-btn`).addEventListener('click', () => {
+            const modal = document.getElementById('edit-modal');
+            const saveBtn = document.getElementById('save-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
+
+            document.getElementById('doseTime').value = item.doseTime;
+            document.getElementById('medicationName').value = item.medicationName;
+            document.getElementById('dosage').value = item.dosage;
+            modal.style.display = 'block';
+
+            saveBtn.addEventListener('click',()=>{
+                const updatedDoseTime = document.getElementById('doseTime').value;
+                const updatedMedicationName = document.getElementById('medicationName').value;
+                const updatedDosage = document.getElementById('dosage').value;
+
+                const updatedData = {
+                    doseTime: updatedDoseTime || item.doseTime,
+                    medicationName: updatedMedicationName || item.medicationName,
+                    dosage: updatedDosage || item.dosage
+                };
+
+                fetch(`/api/doseschedule/update/${item.scheduleId}`, {
+                    method: 'PuT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(updatedData)
+                })
+                .then((response) => {
+                    if(response.ok) {
+                        row.querySelector('.doseTime').textContent = updatedData.doseTime;
+                        row.querySelector('.medicationName').textContent = updatedData.medicationName;
+                        row.querySelector('.dosage').textContent = updatedData.dosage;
+                        modal.style.display = 'none';
+                    }else{
+                        console.error("수정 오류");
+                    }
+                })
+                    .catch(error => console.error("수정 오류",error));
+            });
+            cancelBtn.addEventListener('click',()=>{
+                modal.style.display = 'none';
+            });
+        });
     });
 }
 //새로운 데이터 입력 페이지로 이동.
