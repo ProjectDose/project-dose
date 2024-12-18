@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>투약 관리</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f4f4f8;
+            font-family: 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+        }
+
+        .container-fluid {
+            max-width: 1024px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .nav-pills .nav-link.active {
+            background-color: #007bff;
+        }
+
+        .fc-event {
+            cursor: pointer;
+        }
+
+        .achievement-high {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .achievement-medium {
+            background-color: #ffc107;
+            color: black;
+        }
+
+        .achievement-low {
+            background-color: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<input type="hidden" id="AchievementRates"
+       th:attr="data-achievement-rates=${achievementRatesJson}">
+
+<div class="container-fluid">
+    <!-- 상단 헤더 -->
+    <header class="bg-primary text-white py-3 mb-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            <h1 class="h4 mb-0">투약 관리</h1>
+            <div>
+                <button id="generatePdfBtn" class="btn btn-light me-2">
+                    <i class="bi bi-file-pdf text-primary"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 탭 메뉴 -->
+    <div class="container">
+        <ul class="nav nav-pills nav-fill mb-3" id="mainTabs">
+            <li class="nav-item">
+                <a class="nav-link active" href="#calendar" data-bs-toggle="pill">
+                    <i class="bi bi-calendar"></i> 달력
+                </a>
+            </li>
+        </ul>
+
+        <!-- 탭 컨텐츠 -->
+        <div class="tab-content">
+            <!-- 달력 탭 -->
+            <div class="tab-pane fade show active" id="calendar">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div id="medicationCalendar"></div>
+                    </div>
+                </div>
+                <div id="dailyDetailsContainer" class="card mb-3" style="display:none;">
+                    <div class="card-header">
+                        상세 투약 정보
+                    </div>
+                    <div class="card-body" id="dailyDetailsContent">
+                        <!-- 동적으로 채워질 영역 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-secondary">메인으로</a>
+        </div>
+    </div>
+
+    <!-- PDF 보고서 모달 -->
+    <div class="modal fade" id="reportModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">보고서 생성</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">시작 날짜</label>
+                        <input type="date" id="startDateInput" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">종료 날짜</label>
+                        <input type="date" id="endDateInput" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="downloadPdfBtn" class="btn btn-primary w-100">
+                        PDF 다운로드
+                    </button>
+                    <button id="sendEmailBtn" class="btn btn-success w-100 mt-2">
+                        이메일 전송
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.2/main.min.js"></script>
+<script src="/js/doseStatistics.js"></script>
+</body>
+</html>
