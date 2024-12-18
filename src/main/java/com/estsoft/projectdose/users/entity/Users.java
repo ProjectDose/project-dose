@@ -33,7 +33,7 @@ public class Users {
 	private String name;
 
 	@CreatedDate
-	@Column(name = "join_date", nullable = false) // 수정: LocalDateTime으로 변경
+	@Column(name = "join_date", nullable = false)
 	private LocalDateTime joinDate;
 
 	@Column(name = "is_deleted", nullable = false, columnDefinition = "BOOLEAN DEFAULT false")
@@ -45,7 +45,7 @@ public class Users {
 	@Column(name = "reset_token", length = 100)
 	private String resetToken;
 
-	@Column(name = "reset_token_expiry") // 추가: 토큰 만료 시간 필드
+	@Column(name = "reset_token_expiry")
 	private LocalDateTime resetTokenExpiry;
 
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
