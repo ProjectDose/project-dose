@@ -1,19 +1,57 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getMessaging } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-app.js";
+import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-messaging.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBjk9UV_sprbWteXfmd8Blln9e7hP-1PdM",
-    authDomain: "project-dose-f2bab.firebaseapp.com",
-    projectId: "project-dose-f2bab",
-    storageBucket: "project-dose-f2bab.firebasestorage.app",
-    messagingSenderId: "556048234054",
-    appId: "1:556048234054:web:d6a99a1703af5603403c47",
-    measurementId: "G-GKS22Y7W2Z"
+    apiKey: "AIzaSyARpWti2f7oLQsohw34V-sz5GP2ifYs8Tc",
+    authDomain: "project-dose-a471b.firebaseapp.com",
+    projectId: "project-dose-a471b",
+    storageBucket: "project-dose-a471b.firebasestorage.app",
+    messagingSenderId: "827354406670",
+    appId: "1:827354406670:web:1dbf7964ba4b568025815f",
+    measurementId: "G-9P52WWTFP8"
 };
 
+// 파이어베이스 초기화
 const app = initializeApp(firebaseConfig);
-
 const messaging = getMessaging(app);
 
-const vapidKey = "BEtj-LbGtc7qAkD1PxrvS5KSPpOsmMJevik4dNj0Vmwl9cpKL5z-nW8TJPj_HvTdMZ5FjUHgwPQyp_C3mIYn-e4";
-export { messaging, vapidKey };
+// 서비스 워커 등록
+
+// let currentToken = null;
+window.currentToken = null;
+
+
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/firebase-messaging-sw.js')
+        .then((registration) => {
+            console.log('서비스 워커 등록 완료:', registration);
+
+            // FCM 토큰 발급
+            return getToken(messaging, {
+                vapidKey: "BDLGtSB0cQ5iQD_VAOpKMxaWwOo_FUoJcAlFlPrF8WWhvU8AgDFnmqQebPeXYhFsuYZzsHZ6FeF9vmatY0lgv3w",
+                serviceWorkerRegistration: registration
+            });
+        })
+        .then((token) => {
+            currentToken = token;  // 토큰 저장
+            if (currentToken) {
+                console.log("FCM 토큰:", currentToken);
+            } else {
+                console.warn("FCM 토큰을 받지 못했습니다.");
+            }
+        })
+        .catch((err) => {
+            console.error("서비스 워커 등록 오류 또는 FCM 초기화 오류:", err);
+        });
+}
+
+// 앱이 열려 있을 때 푸시 알림 수신 처리
+onMessage(messaging, (payload) => {
+    console.log("포그라운드 알림 수신:", payload);
+
+    const { title, body } = payload.notification;
+    new Notification(title, {
+        body: body,
+        icon: "/icon.png" // 알림 아이콘 경로
+    });
+});

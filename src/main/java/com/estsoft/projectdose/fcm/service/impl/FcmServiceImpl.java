@@ -39,10 +39,10 @@ public class FcmServiceImpl implements FcmService {
 
 		HttpEntity<String> entity = new HttpEntity<>(message, headers);
 
-		String API_URL = "https://fcm.googleapis.com/v1/projects/project-dose-f2bab/messages:send";
+		String API_URL = "https://fcm.googleapis.com/v1/projects/project-dose-a471b/messages:send";
 		ResponseEntity<String> response = null;
 		try {
-			restTemplate.exchange(API_URL, HttpMethod.POST, entity, String.class);
+			response = restTemplate.exchange(API_URL, HttpMethod.POST, entity, String.class);
 			System.out.println(response.getStatusCode());
 			return response.getStatusCode() == HttpStatus.OK ? 1 : 0;
 		} catch (Exception e) {

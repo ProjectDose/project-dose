@@ -2,6 +2,7 @@ package com.estsoft.projectdose.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -35,7 +36,8 @@ public class SecurityConfig {
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers(
 					"/css/**", "/js/**", "/images/**", "/static/**",
-					"/auth/**", "/oauth2/**", "/api/auth/**", "/error", "/favicon.ico"
+					"/auth/**", "/oauth2/**", "/api/auth/**", "/error", "/favicon.ico",
+					"/api/ai/proxy", "/api/v1/**", "/api/v1/fcm/**","/firebase","/ai", "/firebase-messaging-sw.js"
 				).permitAll()
 				.anyRequest().authenticated()
 			)
@@ -46,9 +48,15 @@ public class SecurityConfig {
 				.passwordParameter("password")
 				.defaultSuccessUrl("/", true)
 				.failureHandler((request, response, exception) -> {
-					request.getSession().setAttribute("errorMessage", "잘못된 이메일 또는 비밀번호입니다.");
-					response.sendRedirect("/auth/login");
+					response.setStatus(HttpStatus.UNAUTHORIZED.value());
+					response.setContentType("application/json");
+					response.getWriter().write("{\"error\": \"로그인 실패\"}");
 				})
+
+				// .failureHandler((request, response, exception) -> {
+				// 	request.getSession().setAttribute("errorMessage", "잘못된 이메일 또는 비밀번호입니다.");
+				// 	response.sendRedirect("/auth/login");
+				// })
 				.permitAll()
 			)
 			.logout(logout -> logout
@@ -65,11 +73,14 @@ public class SecurityConfig {
 				.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
 			)
 
+
 			.csrf(csrf -> csrf.disable())
 			.rememberMe(rememberMe -> rememberMe
 				.key("uniqueAndSecret")
 				.tokenValiditySeconds(86400)
 			);
+
+
 
 		return http.build();
 	}

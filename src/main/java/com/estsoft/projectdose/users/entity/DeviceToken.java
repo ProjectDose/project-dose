@@ -17,8 +17,9 @@ public class DeviceToken {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false)
-	private Long userId;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private Users user;
 
 	@Column(nullable = false, unique = true)
 	private String token;

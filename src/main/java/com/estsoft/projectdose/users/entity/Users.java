@@ -1,6 +1,8 @@
 package com.estsoft.projectdose.users.entity;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 import org.springframework.data.annotation.CreatedDate;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -46,6 +48,6 @@ public class Users {
 	@Column(name = "reset_token_expiry") // 추가: 토큰 만료 시간 필드
 	private LocalDateTime resetTokenExpiry;
 
-	@Column(nullable = true)
-	private String deviceToken;
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<DeviceToken> deviceTokens;
 }

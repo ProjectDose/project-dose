@@ -1,8 +1,8 @@
 importScripts(
-    "https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"
+    "https://www.gstatic.com/firebasejs/11.1.0/firebase-app-compat.js"
 );
 importScripts(
-    "https://www.gstatic.com/firebasejs/10.8.0/firebase-messaging-compat.js"
+    "https://www.gstatic.com/firebasejs/11.1.0/firebase-messaging-compat.js"
 );
 
 self.addEventListener("install", function (e) {
@@ -15,13 +15,13 @@ self.addEventListener("activate", function (e) {
 });
 
 const firebaseConfig = {
-    apiKey: "AIzaSyBjk9UV_sprbWteXfmd8Blln9e7hP-1PdM",
-    authDomain: "project-dose-f2bab.firebaseapp.com",
-    projectId: "project-dose-f2bab",
-    storageBucket: "project-dose-f2bab.firebasestorage.app",
-    messagingSenderId: "556048234054",
-    appId: "1:556048234054:web:d6a99a1703af5603403c47",
-    measurementId: "G-GKS22Y7W2Z"
+    apiKey: "AIzaSyARpWti2f7oLQsohw34V-sz5GP2ifYs8Tc",
+    authDomain: "project-dose-a471b.firebaseapp.com",
+    projectId: "project-dose-a471b",
+    storageBucket: "project-dose-a471b.firebasestorage.app",
+    messagingSenderId: "827354406670",
+    appId: "1:827354406670:web:1dbf7964ba4b568025815f",
+    measurementId: "G-9P52WWTFP8"
 };
 
 // 파이어베이스 초기화
@@ -29,10 +29,15 @@ firebase.initializeApp(firebaseConfig);
 
 const messaging = firebase.messaging();
 
+// 백그라운드 메시지 수신 처리
 messaging.onBackgroundMessage((payload) => {
-    const notificationTitle = payload.title;
+    console.log('[서비스 워커] 백그라운드 메시지 수신:', payload);
+
+    const notificationTitle = payload.notification.title || "알림";
     const notificationOptions = {
-        body: payload.body
+        body: payload.notification.body || "새로운 알림이 도착했습니다."
     };
+
+    // 알림 표시
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
