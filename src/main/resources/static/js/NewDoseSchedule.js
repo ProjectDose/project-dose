@@ -28,7 +28,6 @@ if (modifyButton) {
         });
     });
 }
-
 // 동적 입력 필드 추가
 document.addEventListener('DOMContentLoaded', function() {
     let doseTimeIndex = 2;  // 첫 번째 투약 시간 필드는 이미 존재하므로 2부터 시작
@@ -44,15 +43,9 @@ document.addEventListener('DOMContentLoaded', function() {
         newField.innerHTML = `
             <label for="doseTime${doseTimeIndex}">투약 시간 ${doseTimeIndex}:</label>
             <input type="time" id="doseTime${doseTimeIndex}" name="doseTime[${doseTimeIndex}]" required>
-            <button type="button" class="removeDoseTimeButton">삭제</button> <!-- 삭제 버튼 추가 -->
         `;
         doseTimeFields.appendChild(newField);
         doseTimeIndex++;
-
-        // 삭제 버튼 이벤트 리스너 추가
-        newField.querySelector('.removeDoseTimeButton').addEventListener('click', function() {
-            doseTimeFields.removeChild(newField);
-        });
     });
 
     // 요일 추가 버튼
@@ -73,15 +66,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <option value="SATURDAY">토요일</option>
                 <option value="SUNDAY">일요일</option>
             </select>
-            <button type="button" class="removeDaysOfWeekButton">삭제</button> <!-- 삭제 버튼 추가 -->
         `;
         daysOfWeekFields.appendChild(newField);
         daysOfWeekIndex++;
-
-        // 삭제 버튼 이벤트 리스너 추가
-        newField.querySelector('.removeDaysOfWeekButton').addEventListener('click', function() {
-            daysOfWeekFields.removeChild(newField);
-        });
     });
 
     // 폼 전송 처리
@@ -107,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
         // fetch를 사용하여 서버로 POST 요청 보내기
-        fetch('/api/generate', {
+        fetch('/api/newdoseschedule', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -118,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function() {
             .then(result => {
                 console.log('Success:', result);
                 alert('데이터가 성공적으로 제출되었습니다.');
-                window.location.href="/";
             })
             .catch(error => {
                 console.error('Error:', error);

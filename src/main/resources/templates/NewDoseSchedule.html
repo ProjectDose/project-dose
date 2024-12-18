@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>투약 스케줄 입력</title>
-    <link rel="stylesheet" th:href="@{/css/NewDoseSchedule.css}"/>
+    <title>데이터 입력</title>
+    <link rel="stylesheet" href="styles.css"> <!-- 선택 사항: 스타일 추가 -->
 </head>
 <body>
 
@@ -17,7 +17,6 @@
         <div class="doseTimeField">
             <label for="doseTime1">투약 시간 1:</label>
             <input type="time" id="doseTime1" name="doseTime[1]" required>
-            <button type="button" class="removeDoseTimeButton">삭제</button> <!-- 삭제 버튼 추가 -->
         </div>
     </div>
     <button type="button" id="addDoseTimeButton">투약 시간 추가</button>
@@ -35,7 +34,6 @@
                 <option value="SATURDAY">토요일</option>
                 <option value="SUNDAY">일요일</option>
             </select>
-            <button type="button" class="removeDaysOfWeekButton">삭제</button> <!-- 삭제 버튼 추가 -->
         </div>
     </div>
     <button type="button" id="addDaysOfWeekButton">요일 추가</button>
@@ -61,6 +59,6 @@
     <button type="submit">전송</button>
 </form>
 
-<script th:src="@{/js/NewDoseSchedule.js}" type="text/javascript"></script>
+<script src="NewDoseSchedule.js"></script>
 </body>
 </html>

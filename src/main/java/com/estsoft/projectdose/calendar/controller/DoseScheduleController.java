@@ -19,6 +19,7 @@ import com.estsoft.projectdose.calendar.dto.DoseScheduleResponse;
 import com.estsoft.projectdose.calendar.dto.DoseScheduleViewResponse;
 import com.estsoft.projectdose.calendar.entity.DoseSchedule;
 import com.estsoft.projectdose.calendar.service.DoseScheduleService;
+import com.google.common.annotations.GwtCompatible;
 
 //투약 스케쥴을 달력에 저장/삭제 하기 위한 컨트롤러
 @RestController
