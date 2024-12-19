@@ -134,11 +134,11 @@
 ```
 
 ## 🏭System Structure
-![img.png](img/Architecture.png)
+![img.png](src/main/resources/static/img/Architecture.png)
 
 
 ## 🔐ERD Structure
-![img.png](img/ERD.png)
+![img.png](src/main/resources/static/img/ERD.png)
 
 ## 🎈API 명세서
 
