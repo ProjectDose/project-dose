@@ -50,8 +50,10 @@ public class AdminController {
 	}
 
 	@GetMapping("/{userId}")
-	public ResponseEntity<Users> getUserDetail(@PathVariable Long userId) {
-		return ResponseEntity.ok(adminService.getUserDetail(userId));
+	public ResponseEntity<UserListResponse> getUserDetail(@PathVariable Long userId) {
+		Users users = adminService.getUserDetail(userId);
+		UserListResponse response = UserListResponse.from(users);
+		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("/{userId}/toggle-delete")
