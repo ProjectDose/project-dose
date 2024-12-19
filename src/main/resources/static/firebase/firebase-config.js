@@ -2,13 +2,13 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.1.0/firebas
 import { getMessaging, getToken, onMessage } from "https://www.gstatic.com/firebasejs/11.1.0/firebase-messaging.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyARpWti2f7oLQsohw34V-sz5GP2ifYs8Tc",
-    authDomain: "project-dose-a471b.firebaseapp.com",
-    projectId: "project-dose-a471b",
-    storageBucket: "project-dose-a471b.firebasestorage.app",
-    messagingSenderId: "827354406670",
-    appId: "1:827354406670:web:1dbf7964ba4b568025815f",
-    measurementId: "G-9P52WWTFP8"
+    apiKey: "AIzaSyDUpnur1yyWVo4OUkUajtj4_w81Ob6hobg",
+    authDomain: "project-dose-a8c02.firebaseapp.com",
+    projectId: "project-dose-a8c02",
+    storageBucket: "project-dose-a8c02.firebasestorage.app",
+    messagingSenderId: "733238728889",
+    appId: "1:733238728889:web:a888e0b9ec2eee3ef7a368",
+    measurementId: "G-2ZY91FFX08"
 };
 
 // 파이어베이스 초기화
@@ -16,9 +16,7 @@ const app = initializeApp(firebaseConfig);
 const messaging = getMessaging(app);
 
 // 서비스 워커 등록
-
 window.currentToken = null;
-
 
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/static/firebase-messaging-sw.js')
@@ -27,7 +25,7 @@ if ('serviceWorker' in navigator) {
 
             // FCM 토큰 발급
             return getToken(messaging, {
-                vapidKey: "BDLGtSB0cQ5iQD_VAOpKMxaWwOo_FUoJcAlFlPrF8WWhvU8AgDFnmqQebPeXYhFsuYZzsHZ6FeF9vmatY0lgv3w",
+                vapidKey: "BMc4FNQ5IlbaIjMlBvwR5AHHeX8yAFZXlhzaDUVtwnQloDXpW6XBtwteyT2tZGMGSS4NI082RXtER4qdLXabBx8",
                 serviceWorkerRegistration: registration
             });
         })
