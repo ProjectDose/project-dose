@@ -5,7 +5,20 @@ body {
     background: #f4f4f4;
     padding-top: 165px; /* 헤더 높이만큼 본문 아래로 밀기 */
 }
-
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/piyak.png');
+    background-size: 200px 200px;
+    background-repeat: repeat;
+    background-position: center center;
+    opacity: 0.1;
+    z-index: -1; /* 배경 */
+}
 header {
     position: fixed; /* 헤더 고정 */
     top: 0;
@@ -84,26 +97,6 @@ header {
     color: #3b82f6;
     font-weight: bold;
 }
-body {
-    margin: 0;
-    position: relative;
-    background-color: rgba(255, 255, 255, 0.1); /* 배경색만 투명 적용 */
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-image: url('../images/piyak.png');
-    background-size: 200px 200px;
-    background-repeat: repeat;
-    background-position: center center;
-    opacity: 0.1;
-    z-index: -1; /* 배경 */
-}
 .dose-schedule-container {
     display: flex;
     justify-content: center;
@@ -163,7 +156,7 @@ td {
     width: 40px;
     height: 40px;
     background-color: #f9f871;
-    color: white;
+    color: black;
     font-size: 36px;
     display: flex;
     justify-content: center;
@@ -252,8 +245,85 @@ body {
 .side-menu.open {
     right: 0;
 }
-/* 사이드 메뉴 스타일 끝*/
-/* 여기서 부터는 스케쥴 추가 관련*/
-#dose-schedule{
 
+/* 여기서 부터는 수정 모달 관련*/
+#edit-modal {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+}
+
+#modal-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 입력 필드 간격 */
+}
+
+body.modal-open {
+    overflow: hidden; /* 모달 열릴 때 배경 스크롤 방지 */
+}
+
+#edit-modal.show {
+    display: block; /* 표시 상태로 전환 */
+}
+#sideMenu {
+    position: fixed;
+    top: 0;
+    left: -250px; /* 화면 밖으로 숨김 */
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    overflow-y: auto;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.5);
+    transition: left 0.3s ease; /* 부드러운 애니메이션 */
+    z-index: 1000;
+}
+
+/* 사이드바 열림 상태 */
+#sideMenu.open {
+    left: 0; /* 화면 안으로 들어옴 */
+}
+
+/* 사이드바 내용 */
+#sideMenu .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.menu-button {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    width: 30px;
+    height: 30px;
+    background: #f9f871;
+    color: black;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1100;
+    transition: left 0.3s ease;
+}
+
+.side-menu.open + .menu-button {
+    left: 260px;
 }

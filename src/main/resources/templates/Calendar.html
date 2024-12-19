@@ -13,10 +13,21 @@
         <div class="calendar" id="calendar"></div>
     </div>
 </header>
-<button id="menuButton" class="menu-button">☰</button>
-<div th:replace="~{common/sidemenu}"></div>
-
 <main>
+    <div class="menu-container">
+        <div id="sideMenu" class="side-menu">
+            <div class="menu-header">
+                <button id="closeButton" class="close-button">✕</button>
+            </div>
+            <ul>
+                <li><a th:href="@{/report/statistics}">투약 통계</a></li>
+                <li><a th:href="@{/mypage}">마이 페이지</a></li>
+                <li><a th:href="@{/logout}">로그아웃</a></li>
+                <li><a th:href="@{/admin/users}">관리자 화면</a></li>
+            </ul>
+        </div>
+        <button id="menuButton" class="menu-button">☰</button>
+    </div>
     <div class="dose-schedule-container">
         <table>
             <thead>
