@@ -1,7 +1,4 @@
-# 🐴 Donkey Project 🐴
-<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white"> <img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"> <img src="https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=black"> <img src="https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white"> <img src="https://img.shields.io/badge/gradle-02303A?style=for-the-badge&logo=gradle&logoColor=white"> <img src="https://img.shields.io/badge/AWS-232F3E?style=for-the-badge&logo=AmazonAWS&logoColor=white"> <img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">
-
-
+# 🐴 Project Dose
 
 > 취업과 회사에 대해 자유롭게 이야기 할 수 있는 커뮤니티 👉 [[링크]](http://ormi-donkey.com/)
 
@@ -20,218 +17,332 @@
 
 
 ### 1. 💾**개발 환경**
-![img.png](readme/DevelopmentEnvironment.png)
+## Tech Stack
 
-- Java JDK 21, JavaScript
-- 프론트엔드 : React, HTML, tailwind
-- 백엔드 : Spring Boot
-- 데이터베이스 : PostgreSQL
-- ORM : JPA
-- 배포환경 : AWS EC2, RDS
-- 협업도구 : GitHub, Notion, Miro, ERD Cloud, Figma
+![GitHub Actions](https://img.shields.io/badge/github%20actions-%232671E5.svg?style=for-the-badge&logo=githubactions&logoColor=white)
+![IntelliJ IDEA](https://img.shields.io/badge/IntelliJIDEA-000000.svg?style=for-the-badge&logo=intellij-idea&logoColor=white)
+![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)
+![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white)
 
-### 2. 🤔**기능 정의서**
+### Backend
+![Java](https://img.shields.io/badge/Java-007396?style=for-the-badge&logo=java&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/SpringBoot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 
-- 초안
+### Frontend
+![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white)
+![BootStrap](https://img.shields.io/badge/bootstrap-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
 
-![img.png](readme/mindmap.png)
+### Infrastructure
+![AWS EC2](https://img.shields.io/badge/AWS%20EC2-FF9900?style=for-the-badge&logo=amazon-ec2&logoColor=white)
+![AWS S3](https://img.shields.io/badge/Amazon%20S3-569A31?style=for-the-badge&logo=amazon-s3&logoColor=white)
+![AWS RDS](https://img.shields.io/badge/AWS%20RDS-527FFF?style=for-the-badge&logo=amazon-rds&logoColor=white)
+![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white)
+![Firebase](https://img.shields.io/badge/firebase-FFCA28?style=for-the-badge&logo=firebase&logoColor=white)
 
-- 완료
+<br>
 
-![img.png](readme/FeatureSpecification.png)
+### 2. 🤔**기능 명세서**
+
+### 회원 관리
+
+| **No** | **메뉴** | **기능** | **기능 설명** |  |
+| --- | --- | --- | --- | --- |
+| 1 | 회원가입 | 회원 추가 | 아이디, 비밀번호, 이름, 닉네임 |  |
+| 2 |  | 이메일 중복 검사 | 이메일 형식 및 중복 검사 |  |
+| 3 |  | 닉네임 중복 검사 | 닉네임 중복 검사 |  |
+| 4 |  | 비밀번호 유효성 검사 | 특수문자, 대문자, 소문자 포함 6~20 자리 |  |
+| 5 | 로그인 | 계정 로그인 | 이메일, 비밀번호를 입력해 로그인 |  |
+| 6 |  | 계정 로그인 유지 | 체크버튼을 누르면 로그인 정보를 저장해 로그인 유지 |  |
+| 7 | 계정 찾기 기능 | 이메일 찾기 기능 | 이메일 입력 후 계정 존재 여부 확인 |  |
+| 8 |  | 비밀번호 재설정 메일 전송 | 사용자 메일에 비밀번호 재설정 URL 발송 |  |
+| 9 |  | 비밀번호 재설정 | 토큰 확인 후 비밀번호 재설정 페이지 |  |
+| 10 | 마이페이지 | 회원 정보 수정 | 비밀번호 변경, 닉네임 변경 |  |
+| 11 |  | 닉네임 중복 검사 | 닉네임 변경 시 중복 검사 |  |
+| 12 |  | 회원 탈퇴 | 유저 정보 삭제 |  |
+| 13 | OAuth | OAuth 로그인, 회원가입 | 카카오 OAuth |  |
+
+### 관리자
+
+| **No** | **메뉴** | **기능** | **기능 설명** |
+| --- | --- | --- | --- |
+| 1 | 회원 정보 관리 | 회원 목록 조회 | 회원 목록 조회 |
+| 2 |  | 회원 삭제/차단 기능 | (추가구현)회원의 임시차단, 회원 탈퇴 시키는 화면 |
+
+### **투약 캘린더**
+
+| No | 메뉴 | 기능 | 기능 설명 |
+| --- | --- | --- | --- |
+| 1 | 캘린더 | 투약 정보 생성 | 약 이름, 투여일정, 투여시간, 복용량(옵션), 복용여부 |
+| 2 |  | 투약 정보 삭제 | hard delete |
+| 3 |  | 투약 정보 수정 | 약 이름, 투여일정, 투여시간, 복용량(옵션) |
+| 4 |  | 당일 투약 목록 | 하루 단위로 투약 일정 목록, 목록에서 투약 버튼 |
+| 5 |  | 주간 일정 목록 | 상단에 주 단위 날짜 표기 |
+
+### 통계 기능
+
+| **No** | **메뉴** | **기능** | **기능 설명** |
+| --- | --- | --- | --- |
+| 1 | 일별 통계 | 월 단위 일정 | 달력에서 일별로 달성도 |
+| 2 |  |  | 날짜 클릭 시 복용 달성률, 복용 횟수 표시 |
+| 3 | 주별 통계 | 지난주 달성률 | 지난 1주간 복용 달성률 표시 |
+| 4 | 투약 이력 출력 | 통계 PDF | 과거 투약 이력 PDF로 출력 기능 |
+
+### 알림 기능
+
+| **No** | **메뉴** | **기능** | **기능 설명** |
+| --- | --- | --- | --- |
+| 1 | 알림 | 투약 알림 | 웹 페이지에서 투약 시간에 알림 기능 |
+| 2 |  |  | 웹 페이지 내 알림에서 복용 여부 체크 가능 |
+| 3 |  | 투약 재 알림 | 복용 시간 지난 약 알림(30분 후 알림) |
+| 4 |  |  | 웹 페이지 내 알림에서 복용 여부 체크 가능 |
+| 5 | toast 팝업 | 알림 | 알림 이벤트 발생 시  toast 팝업 |
+| 6 | FCM 푸시 | 알림 | 알림 이벤트 발생 시  푸시 알림 |
+
+### 앨런 AI 기능
+
+| **No** | **메뉴** | **기능** | **기능 설명** |
+| --- | --- | --- | --- |
+| 1 | 약 정보 제공 | 복용 주의사항 제공 | 약에 대한 주의사항, 혼용 시 문제 될 수 있는 음식, 약 등의 정보 제공 |
+| 2 | 투약 입력 | 문장으로 투약 입력 | 사용자가 챗봇으로 투약 정보를 알려주면 문장을 기반으로 DB에 투약정보 생성 |
 
 ### 3. 🔎**개발 일정**
 
-![img.png](readme/DevelopmentSchedule.png)
+11/22(금) ~ 12/20(금)
 
-## ✨UI(화면) 설계서 
+## ✨화면 설계서
 
-- [피그마 링크 바로가기]([https://www.figma.com/file/UxckBh583uPenF9pmlpJUd/Untitled?type=design&node-id=0%3A1&mode=design&t=xacdis5Qkeh8AcrZ-1])
+- [피그마 링크 바로가기](https://www.figma.com/design/MHo4sYaluH3V8VyPcu7vIo/Project_Dose?node-id=0-1&t=b6YrEvOq5R2sPcTE-1)
 
-|                                                                                                                       |                                                                                                                   |
-|-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
-| Main Page (Member)                                                                                                    | Main Page (Guest)                                                                                                 |
-| <img src="https://github.com/lth01/ormi-community/assets/139758405/2eb7e023-322b-42f2-a676-60a5603d1766" width="370"> | <img src="https://github.com/lth01/ormi-community/assets/139758405/c1397cc9-51d8-46fe-8133-6467f75a85f0" width="370"> |
-| Login Page                                                                                                            | SignUp Page                                                                                                       |
-| <img src="https://github.com/lth01/ormi-community/assets/139758405/91d139f6-fa1e-4a8e-af42-1d3eed0fe794" width="370"> | <img src="https://github.com/lth01/ormi-community/assets/139758405/457792b5-48d8-424c-92fb-bd79caeba71e" width="370">    |
-| SignUp complete Page                                                                                                  | Modify-info Page                                                                                                  |
-| <img src="https://github.com/lth01/ormi-community/assets/139758405/962ca99e-8d30-4508-b3ec-edca7d906694" width="370"> | <img src="https://github.com/lth01/ormi-community/assets/139758405/2d3fb2b9-c49c-4f65-a0fd-ae020204cb01" width="370">    |
-| Find Password Page                                                                                                    | Change Password Page                                                                                              |
-| <img src="https://github.com/lth01/ormi-community/assets/139758405/179ce85e-6933-4474-b8a9-951149c3292c" width="370"> | <img src="https://github.com/lth01/ormi-community/assets/139758405/96eb0e20-a95c-4ce2-b990-7abd2f56e05c" width="370">    |
-| Board Write Page                                                                                                      | Admin Page                                                                                                        |
-| <img src="https://github.com/lth01/ormi-community/assets/139758405/18ac552c-7592-4eaf-993e-8e43cc11f01e" width="370"> | <img src="https://github.com/lth01/ormi-community/assets/139758405/4e27ac65-c996-43fe-9ecf-b38799f0f5b7" width="370">    |
+|                                                                                                                       |                                                                                                                       |
+|-----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| Main Page (Member)                                                                                                    | Main Page (Guest)                                                                                                     |
+| <img src="" width="370"> | <img src="" width="370"> |
+| Login Page                                                                                                            | SignUp Page                                                                                                           |
+|                                                                                                                       |                                                                                                                       |
+
 ## 📂Project Structure
-
-### 🌐 Front-End
 ```
-📁 src
-├── 📁 assets
-├── 📁 components
-│   ├── 📁 Board
-│   ├── 📁 Comment
-│   ├── 📁 Document
-│   ├── 📁 Icon
-│   ├── 📁 Industry
-│   ├── 📁 Layout
-│   ├── 📁 Menu
-│   ├── 📁 Password
-│   └── 📁 ui
-├── 📁 lib
-├── 📁 routes
-│   ├── 📁 Board
-│   ├── 📁 Document
-│   ├── 📁 Main
-│   ├── 📁 Password
-│   ├── 📁 Signup
-│   ├── 📁 User
-│   └── 📁 admin
-└── 📁 utils
-```
-### ⚙️ Back-End
-```
-📁 src
-├── 📁 config
-│   ├── 📃 SecurityConfig.java
-│   └── 📃 SwaggerConfig.java
-├── 📁 controller
-│   ├── 📃 AdminController.java
-│   ├── 📃 BoardController.java
-│   ├── 📃 CommentController.java
-│   ├── 📃 CompanyController.java
-│   ├── 📃 DocumentController.java
-│   ├── 📃 IndustryController.java
-│   ├── 📃 LikeItController.java
-│   ├── 📃 MemberController.java
-│   ├── 📃 PasswordQuestionController.java
-│   ├── 📃 ReportController.java
-│   └── 📃 ViewershipController.java
-├── 📁 domain
-│   ├── 📁 dto
-│   └── 📁 entity
-├── 📁 repository
-├── 📁 security
-│   ├── 📃 MemberDetailsService.java
-│   ├── 📁 exception
-│   ├── 📁 filter
-│   └── 📁 handler
-└── 📁 service
+📦src
+ ┣ 📂main
+ ┃ ┣ 📂java
+ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┗ 📂estsoft
+ ┃ ┃ ┃ ┃ ┗ 📂projectdose
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂admin
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂calendar
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂exception
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂fcm
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂impl
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂report
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂users
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂exception
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂util
+ ┃ ┗ 📂resources
+ ┃ ┃ ┣ 📂firebase
+ ┃ ┃ ┣ 📂static
+ ┃ ┃ ┃ ┣ 📂css
+ ┃ ┃ ┃ ┣ 📂firebase
+ ┃ ┃ ┃ ┣ 📂fonts
+ ┃ ┃ ┃ ┣ 📂img
+ ┃ ┃ ┃ ┗ 📂js
+ ┃ ┃ ┣ 📂templates
+ ┃ ┃ ┃ ┗ 📂common
+ ┗ 📂test
 ```
 
 ## 🏭System Structure
-![img.png](readme/SystemStructure.png)
+![img.png](src/main/resources/static/img/Architecture.png)
 
 
 ## 🔐ERD Structure
-![img.png](readme/ERD.png)
+- [ERDCloud](https://www.erdcloud.com/d/s9NpRt9zbDWTytzFL)
+
+![img.png](src/main/resources/static/img/ERD.png)
 
 ## 🎈API 명세서
 
-### 📁 Member
-| 🏷NAME         | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
+### 📁 Signup
+| 🏷NAME         | ⚙METHOD | 📎URL                         | 📖DESCRIPTION              |
 |---------------------|---------|-------------------------------|--------------------------|
-| withdrawal     | PUT     | /member/withdrawal            | 회원 탈퇴 요청           |
-| modify         | PUT     | /member/modifyInfo            | 회원 정보 수정           |
-| signup         | POST    | /member/register              | 회원 가입                |
-| findPassword   | POST    | /member/findpassword          | 비밀번호 찾기            |
-| changePassword | POST    | /member/changepassword        | 비밀번호 변경            |
-| userInfo       | GET     | /member/userinfo              | 사용자 정보 조회         |
-| userInfo_1     | GET     | /member/userinfo/{email}      | 이메일로 사용자 정보 조회|
+| signUp                 | POST | /api/auth/signup               | 회원 가입               |
+| checkEmailDuplicate    | GET  | /api/auth/checkEmailDuplicate  | 이메일 중복 체크         |
+| checkNicknameDuplicate | GET  | /api/auth/checkNicknameDuplicate| 닉네임 중복 체크       |
 
-### 📁 Document
+### 📁 Login
 | 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION |
 |---------------------|---------|-------------------------------|---------------|
-| increaseDocumentLike| PUT     | /document/{document_id}/like  | 게시글 좋아요 증가    |
-| modifyDocument      | PUT     | /document/manage/{document_id}| 게시글 수정         |
-| deleteDocument      | DELETE  | /document/manage/{document_id}| 게시글 삭제         |
-| saveDocument        | POST    | /document/manage              | 게시글 저장         |
-| showOneDocument     | GET     | /document/{document_id}       | 특정 게시글 조회      |
-| showAllDocument     | GET     | /document/list/{board_id}     | 게시판별 모든 게시글 조회 |
+| login               | POST    | /api/auth/login               | 로그인          |
+| logout              | GET     | /api/auth/logout              | 로그아웃         |
+| findPassword        | POST    | /api/auth/findPassword        | 비밀번호 찾기    |
+| resetPassword       | POST    | /api/auth/resetPassword       | 비밀번호 재설정   |
 
-### 📁 Comment
+### 📁 User
 | 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
 |---------------------|---------|-------------------------------|--------------------------|
-| showOneComment      | GET     | /comment/{comment_id}         | 특정 댓글 조회           |
-| modifyComment       | PUT     | /comment/{comment_id}         | 댓글 수정                |
-| deleteComment       | DELETE  | /comment/{comment_id}         | 댓글 삭제                |
-| likeComment         | PUT     | /comment/{comment_id}/like    | 댓글 좋아요 처리         |
-| saveComment         | POST    | /comment/{doc_id}             | 댓글 저장                |
-| showCommentAll      | GET     | /comment/list/{doc_id}        | 게시글 ID로 모든 댓글 조회 |
+| userInfoUpdate      | PUT     | /api/users/{userId}           | 사용자 정보 수정           |
+| requsetUserdelete   | DELETE  | /api/users/{userId}           | 사용자 탈퇴 요청                |
+| viewMypage          | GET     | /api/users/{userId}/myPage    | 마이페이지 확인                |
 
-### 📁 Viewership
-| 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
-|---------------------|---------|-------------------------------|--------------------------|
-| searchViewershipCount| GET    | /viewership/{doc_id}          | 게시글 조회수 조회         |
-| updateViewershipCount| PUT    | /viewership/{doc_id}          | 게시글 조회수 업데이트     |
-
-### 📁 Like
-| 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
-|---------------------|---------|-------------------------------|--------------------------|
-| searchLikeItCount   | GET     | /likeit/{uuid}                | 좋아요 수 조회           |
-| updateLikeItCount   | PUT     | /likeit/{uuid}                | 좋아요 수 업데이트       |
 
 ### 📁 Report
 | 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
 |---------------------|---------|-------------------------------|--------------------------|
-| acceptReport        | PUT     | /admin/report/accept/{report_id}| 신고 승인 처리        |
-| reportDocument      | POST    | /report/doc/{document_id}     | 게시글 신고                |
-| reportComment       | POST    | /report/com/{comment_id}      | 댓글 신고                |
-| showAllReport       | GET     | /admin/report                 | 모든 신고 내역 조회      |
+| showAllReport         | GET    | /api/report                    | 복약 통계 조회         |
+| makeReportImage      | GET    | /api/report/startDate={startDate}&endDate={endDate}| 복약 리포트 이미지 생성     |
 
 ### 📁 Admin
 | 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
 |---------------------|---------|-------------------------------|--------------------------|
-| updateBoardStatus   | PUT     | /admin/board                  | 게시판 상태 업데이트     |
-| savePasswordQuestion| POST    | /admin/passwordquestion       | 비밀번호 질문 저장       |
-| saveIndustry        | POST    | /admin/industry               | 산업 정보 저장           |
+| searchUser          | GET     | /api/users                    | 등록 유저 조회           |
+| deleteUser          | PUT     | /api/deleteuser={userId}      | 등록 유저 삭제            |
+| searchUserDetails   | PUT     | /api/users?userId={userId}     | 등록 유저 상세 조회       |
 
-### 📁 Password Question
+### 📁 Calander
 | 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
 |---------------------|---------|-------------------------------|--------------------------|
-| searchPasswordQuestion| GET   | /passwordquestion             | 비밀번호 질문 조회       |
+| createDoseInfo      | POST   | /api/schedule                 | 투약 정보 생성         |
+| deleteDoseInfo      | DELETE   | /api/schedule/{scheduleId}   | 투약 정보 삭제       |
+| updateDoseInfo      | PUT   | /api/schedule/{scheduleId}      | 투약 정보 수정      |
+| searchDoseDetail    | GET   | /api/schedule/{scheduleId}       | 투약 상세 조회       |
+| searchDoseList      | GET   | /api/scheduleList/{date}         | 투약 목록 조회       |
+| updateDosageStatus    | PUT   | /api/log/{logId}               | 투여 여부 수정       |
+| updateDosageAllStatus  | PUT   | /api/log                       | 투여 여부 전체 수정    |
 
-### 📁 Industry
+### 📁 Notification
 | 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
 |---------------------|---------|-------------------------------|--------------------------|
-| searchIndustry      | GET     | /industry                     | 산업 정보 조회           |
+| sendFcmNoti         | POST     | /api/v1/fcm/sendMessage      | FCM 알림 전송           |
+| saveFcmToken        | POST     | /api/v1/device-token/register | FCM 토큰 저장           |
 
-### 📁 Company
-| 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
-|---------------------|---------|-------------------------------|--------------------------|
-| bringCompanyDataById| GET     | /companydata/{com_id}         | 회사 ID로 회사 데이터 조회|
-| bringCompanyDataByName| GET   | /companydata/name/{com_Name}  | 회사 이름으로 회사 데이터 조회|
 
-### 📁 Board
-| 🏷NAME              | ⚙METHOD | 📎URL                         | 📖DESCRIPTION            |
-|---------------------|---------|-------------------------------|--------------------------|
-| requestCreateBoard  | POST    | /board                        | 게시판 생성 요청         |
-| searchBoard         | GET     | /board/{isApprove}            | 승인된 게시판 조회       |
 
-## 🎞시연 영상
-
-https://github.com/lth01/ormi-community/assets/139758405/a0ee498f-a7e4-4640-a62e-661d693c177f
-
-https://github.com/lth01/ormi-community/assets/139758405/8b932928-b806-47aa-8b2b-f31235d78359
-
-https://github.com/lth01/ormi-community/assets/139758405/9ab64b24-33f5-48f2-9f5f-c7e4e7e796d2
-
-https://github.com/lth01/ormi-community/assets/139758405/2dad5efc-d509-4098-9f3b-79637befee37
-
-https://github.com/lth01/ormi-community/assets/139758405/f846baef-432b-4e98-9525-312e34f93f10
-
-https://github.com/lth01/ormi-community/assets/139758405/b959897c-04e2-4969-bff0-3e675c7735d3
-
+<br>
 
 ## 🛠Coding Convention
 
-### Java Convention
+### 자바 컨벤션
 
-[자바 컨벤션](https://github.com/lth01/ormi-community/wiki/01-Java-Coding-Convention#java-coding-convention)
+* [네이버 코딩 컨벤션](https://www.notion.so/oreumi/202d0d0895884dd7847673fe7d40a0e0)
 
-### Other Convention
+<br>
 
-[기타 컨벤션](https://github.com/lth01/ormi-community/wiki/02-Other-Convention)
+### 커밋 메시지 컨벤션
 
-## 👨‍💻Participation Member
-- 이태희
-- 김요한
-- 김경록
+```
+type : subject
+
+body
+
+footer
+```
+
+> Commit Type
+>
+> 타입은 태그와 제목으로 구성되고, 태그는 영어로 쓰되 첫 문자는 대문자로 한다.
+
+**`태그 : 제목`의 형태이며, `:`뒤에만 space가 있음에 유의한다.**
+
+- `feat` : 새로운 기능 추가
+- `fix` : 버그 수정
+- `docs` : 문서 수정
+- `style` : 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우
+- `refactor` : 코드 리펙토링
+- `test` : 테스트 코드, 리펙토링 테스트 코드 추가
+- `chore` : 빌드 업무 수정, 패키지 매니저 수정
+
+> 3. Subject
+>
+> - 제목은 최대 50글자가 넘지 않도록 하고 마침표 및 특수기호는 사용하지 않는다.
+> - 영문으로 표기하는 경우 동사(원형)를 가장 앞에 두고 첫 글자는 대문자로 표기한다.(과거 시제를 사용하지 않는다.)
+> - 제목은 **개조식 구문**으로 작성한다. --> 완전한 서술형 문장이 아니라, 간결하고 요점적인 서술을 의미.
+- Fixed --> Fix
+- Added --> Add
+- Modified --> Modify
+
+> 4. Body
+>
+
+본문은 다음의 규칙을 지킨다.
+
+- 본문은 한 줄 당 72자 내로 작성한다.
+- 본문 내용은 양에 구애받지 않고 최대한 상세히 작성한다.
+- 본문 내용은 어떻게 변경했는지 보다 무엇을 변경했는지 또는 왜 변경했는지를 설명한다.
+
+> 5. footer
+>
+
+꼬릿말은 다음의 규칙을 지킨다.
+
+- 꼬리말은 `optional`이고 `이슈 트래커 ID`를 작성한다.
+
+- 꼬리말은 `"유형: #이슈 번호"` 형식으로 사용한다.
+- 여러 개의 이슈 번호를 적을 때는 `쉼표(,)`로 구분한다.
+- 이슈 트래커 유형은 다음 중 하나를 사용한다.`Fixes`: 이슈 수정중 (아직 해결되지 않은 경우)`Resolves`: 이슈를 해결했을 때 사용`Ref`: 참고할 이슈가 있을 때 사용`Related to`: 해당 커밋에 관련된 이슈번호 (아직 해결되지 않은 경우)**`ex) Fixes: #45 Related to: #34, #23`**
+
+<br>
+
+## PR 템플릿
+```
+## 🔎 작업 내용
+
+> 기능에서 어떤 부분이 구현되었는지 설명해주세요
+
+<br/>
+
+## ➕ 이슈 링크
+
+> #이슈번호
+
+<br/>
+
+## 이미지 첨부 (선택)
+
+<br/>
+```
+
+## Issues 템플릿
+```
+## 설명
+> 코드에 대한 설명
+
+## 진행 상황
+- [ ] todo1
+- [ ] todo2
+- [ ] todo3
+
+## 부가 설명
+> 기타
+```
+
+
+## 👨‍💻 팀원
+- 장준혁
+- 김근우
+- 정윤호
+- 정승원
