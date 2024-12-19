@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# AWS Secrets Manager에서 시크릿 가져오기
+SECRETS=$(aws secretsmanager get-secret-value --secret-id project-dose-variables --query SecretString --output text)
+
+# jq를 사용하여 환경변수 설정
+export DB_USERNAME=$(echo $SECRETS | jq -r '.DB_USERNAME')
+export DB_PASSWORD=$(echo $SECRETS | jq -r '.DB_PASSWORD')
+export EMAIL_USERNAME=$(echo $SECRETS | jq -r '.EMAIL_USERNAME')
+export EMAIL_PASSWORD=$(echo $SECRETS | jq -r '.EMAIL_PASSWORD')
+export KAKAO_CLIENT_ID=$(echo $SECRETS | jq -r '.KAKAO_CLIENT_ID')
+export KAKAO_CLIENT_SECRET=$(echo $SECRETS | jq -r '.KAKAO_CLIENT_SECRET')
+
 BUILD_JAR=$(ls /home/ec2-user/action/build/libs/*SNAPSHOT.jar)
 JAR_NAME=$(basename $BUILD_JAR)
 echo "## build file name : $JAR_NAME" >> /home/ec2-user/action/spring-deploy.log
