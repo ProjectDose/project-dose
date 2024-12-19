@@ -54,9 +54,9 @@
 
 ![img.png](readme/DevelopmentSchedule.png)
 
-## ✨UI(화면) 설계서
+## ✨화면 설계서
 
-- [피그마 링크 바로가기]([https://www.figma.com/design/MHo4sYaluH3V8VyPcu7vIo/Project_Dose?node-id=0-1&t=b6YrEvOq5R2sPcTE-1])
+- [피그마 링크 바로가기](https://www.figma.com/design/MHo4sYaluH3V8VyPcu7vIo/Project_Dose?node-id=0-1&t=b6YrEvOq5R2sPcTE-1)
 
 |                                                                                                                       |                                                                                                                       |
 |-----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
@@ -121,7 +121,7 @@
 
 
 ## 🔐ERD Structure
-- [ERDCloud]([https://www.erdcloud.com/d/s9NpRt9zbDWTytzFL])
+- [ERDCloud](https://www.erdcloud.com/d/s9NpRt9zbDWTytzFL)
 
 ![img.png](src/main/resources/static/img/ERD.png)
 
