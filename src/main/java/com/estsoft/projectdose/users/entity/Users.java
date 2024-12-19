@@ -51,3 +51,4 @@ public class Users {
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
 	private List<DeviceToken> deviceTokens;
 }
+

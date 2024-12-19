@@ -17,7 +17,6 @@ const messaging = getMessaging(app);
 
 // 서비스 워커 등록
 
-// let currentToken = null;
 window.currentToken = null;
 
 
