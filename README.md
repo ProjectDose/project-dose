@@ -64,85 +64,74 @@
 
 ![img.png](readme/DevelopmentSchedule.png)
 
-## ✨UI(화면) 설계서 
+## ✨UI(화면) 설계서
 
-- [피그마 링크 바로가기]([https://www.figma.com/file/UxckBh583uPenF9pmlpJUd/Untitled?type=design&node-id=0%3A1&mode=design&t=xacdis5Qkeh8AcrZ-1])
+- [피그마 링크 바로가기]([https://www.figma.com/design/MHo4sYaluH3V8VyPcu7vIo/Project_Dose?node-id=0-1&t=b6YrEvOq5R2sPcTE-1])
 
-|                                                                                                                       |                                                                                                                   |
-|-----------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------|
-| Main Page (Member)                                                                                                    | Main Page (Guest)                                                                                                 |
-| <img src="https://github.com/lth01/ormi-community/assets/139758405/2eb7e023-322b-42f2-a676-60a5603d1766" width="370"> | <img src="https://github.com/lth01/ormi-community/assets/139758405/c1397cc9-51d8-46fe-8133-6467f75a85f0" width="370"> |
-| Login Page                                                                                                            | SignUp Page                                                                                                       |
-| <img src="https://github.com/lth01/ormi-community/assets/139758405/91d139f6-fa1e-4a8e-af42-1d3eed0fe794" width="370"> | <img src="https://github.com/lth01/ormi-community/assets/139758405/457792b5-48d8-424c-92fb-bd79caeba71e" width="370">    |
-| SignUp complete Page                                                                                                  | Modify-info Page                                                                                                  |
-| <img src="https://github.com/lth01/ormi-community/assets/139758405/962ca99e-8d30-4508-b3ec-edca7d906694" width="370"> | <img src="https://github.com/lth01/ormi-community/assets/139758405/2d3fb2b9-c49c-4f65-a0fd-ae020204cb01" width="370">    |
-| Find Password Page                                                                                                    | Change Password Page                                                                                              |
-| <img src="https://github.com/lth01/ormi-community/assets/139758405/179ce85e-6933-4474-b8a9-951149c3292c" width="370"> | <img src="https://github.com/lth01/ormi-community/assets/139758405/96eb0e20-a95c-4ce2-b990-7abd2f56e05c" width="370">    |
-| Board Write Page                                                                                                      | Admin Page                                                                                                        |
-| <img src="https://github.com/lth01/ormi-community/assets/139758405/18ac552c-7592-4eaf-993e-8e43cc11f01e" width="370"> | <img src="https://github.com/lth01/ormi-community/assets/139758405/4e27ac65-c996-43fe-9ecf-b38799f0f5b7" width="370">    |
+|                                                                                                                       |                                                                                                                       |
+|-----------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------|
+| Main Page (Member)                                                                                                    | Main Page (Guest)                                                                                                     |
+| <img src="" width="370"> | <img src="" width="370"> |
+| Login Page                                                                                                            | SignUp Page                                                                                                           |
+|                                                                                                                       |                                                                                                                       |
+
 ## 📂Project Structure
-
-### 🌐 Front-End
 ```
-📁 src
-├── 📁 assets
-├── 📁 components
-│   ├── 📁 Board
-│   ├── 📁 Comment
-│   ├── 📁 Document
-│   ├── 📁 Icon
-│   ├── 📁 Industry
-│   ├── 📁 Layout
-│   ├── 📁 Menu
-│   ├── 📁 Password
-│   └── 📁 ui
-├── 📁 lib
-├── 📁 routes
-│   ├── 📁 Board
-│   ├── 📁 Document
-│   ├── 📁 Main
-│   ├── 📁 Password
-│   ├── 📁 Signup
-│   ├── 📁 User
-│   └── 📁 admin
-└── 📁 utils
-```
-### ⚙️ Back-End
-```
-📁 src
-├── 📁 config
-│   ├── 📃 SecurityConfig.java
-│   └── 📃 SwaggerConfig.java
-├── 📁 controller
-│   ├── 📃 AdminController.java
-│   ├── 📃 BoardController.java
-│   ├── 📃 CommentController.java
-│   ├── 📃 CompanyController.java
-│   ├── 📃 DocumentController.java
-│   ├── 📃 IndustryController.java
-│   ├── 📃 LikeItController.java
-│   ├── 📃 MemberController.java
-│   ├── 📃 PasswordQuestionController.java
-│   ├── 📃 ReportController.java
-│   └── 📃 ViewershipController.java
-├── 📁 domain
-│   ├── 📁 dto
-│   └── 📁 entity
-├── 📁 repository
-├── 📁 security
-│   ├── 📃 MemberDetailsService.java
-│   ├── 📁 exception
-│   ├── 📁 filter
-│   └── 📁 handler
-└── 📁 service
+📦src
+ ┣ 📂main
+ ┃ ┣ 📂java
+ ┃ ┃ ┗ 📂com
+ ┃ ┃ ┃ ┗ 📂estsoft
+ ┃ ┃ ┃ ┃ ┗ 📂projectdose
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂admin
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂calendar
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂exception
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂fcm
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂config
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂impl
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂report
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂users
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂exception
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂service
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂util
+ ┃ ┗ 📂resources
+ ┃ ┃ ┣ 📂firebase
+ ┃ ┃ ┣ 📂static
+ ┃ ┃ ┃ ┣ 📂css
+ ┃ ┃ ┃ ┣ 📂firebase
+ ┃ ┃ ┃ ┣ 📂fonts
+ ┃ ┃ ┃ ┣ 📂img
+ ┃ ┃ ┃ ┗ 📂js
+ ┃ ┃ ┣ 📂templates
+ ┃ ┃ ┃ ┗ 📂common
+ ┗ 📂test
 ```
 
 ## 🏭System Structure
-![img.png](readme/SystemStructure.png)
+![img.png](img/Architecture.png)
 
 
 ## 🔐ERD Structure
-![img.png](readme/ERD.png)
+![img.png](img/ERD.png)
 
 ## 🎈API 명세서
 
@@ -247,7 +236,15 @@ https://github.com/lth01/ormi-community/assets/139758405/b959897c-04e2-4969-bff0
 
 [자바 컨벤션](https://github.com/lth01/ormi-community/wiki/01-Java-Coding-Convention#java-coding-convention)
 
-### Other Convention
+### 커밋 컨벤션
+
+```
+type : subject
+
+body
+
+footer
+```
 
 [기타 컨벤션](https://github.com/lth01/ormi-community/wiki/02-Other-Convention)
 
