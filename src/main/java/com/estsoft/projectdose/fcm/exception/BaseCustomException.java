@@ -1,4 +1,4 @@
-package com.estsoft.projectdose.exception;
+package com.estsoft.projectdose.fcm.exception;
 
 public class BaseCustomException extends RuntimeException {
 
