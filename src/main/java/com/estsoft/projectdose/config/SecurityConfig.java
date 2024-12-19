@@ -49,11 +49,6 @@ public class SecurityConfig {
 					response.setContentType("application/json");
 					response.getWriter().write("{\"error\": \"로그인 실패\"}");
 				})
-
-				// .failureHandler((request, response, exception) -> {
-				// 	request.getSession().setAttribute("errorMessage", "잘못된 이메일 또는 비밀번호입니다.");
-				// 	response.sendRedirect("/auth/login");
-				// })
 				.permitAll()
 			)
 			.logout(logout -> logout
@@ -70,14 +65,11 @@ public class SecurityConfig {
 				.userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
 			)
 
-
 			.csrf(csrf -> csrf.disable())
 			.rememberMe(rememberMe -> rememberMe
 				.key("uniqueAndSecret")
 				.tokenValiditySeconds(86400)
 			);
-
-
 
 		return http.build();
 	}

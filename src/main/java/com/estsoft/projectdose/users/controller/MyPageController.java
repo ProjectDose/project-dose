@@ -53,5 +53,4 @@ public class MyPageController {
 			return ResponseEntity.status(400).body(Map.of("message", e.getMessage()));
 		}
 	}
-
 }

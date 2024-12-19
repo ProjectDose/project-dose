@@ -56,5 +56,4 @@ public class MypageViewController {
 		model.addAttribute("id", user.getId());
 		return "change-password";
 	}
-
 }

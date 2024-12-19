@@ -38,67 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-
-    // loginForm.addEventListener('submit', async (event) => {
-    //     event.preventDefault();
-    //     const formData = new FormData(loginForm);
-    //
-    //     try {
-    //         const loginResponse = await fetch('/auth/login', {
-    //             method: 'POST',
-    //             body: formData
-    //         });
-    //
-    //         if (loginResponse.ok) {
-    //             // 로그인 성공 시 FCM 토큰 등록
-    //             if (window.currentToken) {
-    //                 const tokenResponse = await fetch('/api/v1/device-token/register', {
-    //                     method: 'POST',
-    //                     headers: {
-    //                         'Content-Type': 'application/json'
-    //                     },
-    //                     body: JSON.stringify({
-    //                         email: formData.get('email'),
-    //                         token: window.currentToken
-    //                     })
-    //                 });
-    //
-    //                 const tokenData = await tokenResponse.json();
-    //                 console.log("토큰 등록 결과:", tokenData);
-    //             } else {
-    //                 console.warn("FCM 토큰이 발급되지 않았습니다.");
-    //             }
-    //             window.location.href = '/home';
-    //         } else {
-    //             alert('잘못된 이메일 또는 비밀번호입니다.');
-    //         }
-    //     } catch (error) {
-    //         console.error('로그인 또는 토큰 등록 오류:', error);
-    //         alert('서버 오류가 발생했습니다. 다시 시도해주세요.');
-    //     }
-    // });
-
-    // loginForm.addEventListener('submit', (event) => {
-    //     event.preventDefault();
-    //     const formData = new FormData(loginForm);
-    //
-    //     fetch('/auth/login', {
-    //         method: 'POST',
-    //         body: formData
-    //     })
-    //         .then(response => {
-    //             if (response.ok) {
-    //                 window.location.href = '/home';
-    //             } else {
-    //                 alert('잘못된 이메일 또는 비밀번호입니다.');
-    //             }
-    //         })
-    //         .catch(error => {
-    //             console.error('Error:', error);
-    //             alert('서버 오류가 발생했습니다. 다시 시도해주세요.');
-    //         });
-    // });
-
     window.openPasswordResetModal = () => {
         const passwordResetModal = new bootstrap.Modal(document.getElementById('passwordResetModal'));
         passwordResetModal.show();

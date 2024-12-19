@@ -5,7 +5,9 @@ import com.estsoft.projectdose.users.dto.PasswordResetRequest;
 import com.estsoft.projectdose.users.dto.SignUpRequest;
 import com.estsoft.projectdose.users.entity.Users;
 import com.estsoft.projectdose.users.entity.Role;
+import com.estsoft.projectdose.users.repository.DeviceTokenRepository;
 import com.estsoft.projectdose.users.repository.UsersRepository;
+import com.estsoft.projectdose.users.entity.DeviceToken;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
@@ -21,17 +23,21 @@ import jakarta.mail.internet.MimeMessage;
 
 import java.time.LocalDateTime;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UsersService {
 
+	private final DeviceTokenRepository deviceTokenRepository;
 	private final UsersRepository usersRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final JavaMailSender mailSender;
 
-	public UsersService(UsersRepository usersRepository, PasswordEncoder passwordEncoder, JavaMailSender mailSender) {
+	public UsersService(DeviceTokenRepository deviceTokenRepository, UsersRepository usersRepository, PasswordEncoder passwordEncoder, JavaMailSender mailSender) {
+		this.deviceTokenRepository = deviceTokenRepository;
 		this.usersRepository = usersRepository;
 		this.passwordEncoder = passwordEncoder;
 		this.mailSender = mailSender;
@@ -222,4 +228,11 @@ public class UsersService {
 		}
 		throw new IllegalStateException("해당 유저 없음");
 	}
+
+	// public List<String> getDeviceTokens(Long userId) {
+	// 	return deviceTokenRepository.findAllByUser_UserId(userId)
+	// 		.stream()
+	// 		.map(DeviceToken::getToken)
+	// 		.collect(Collectors.toList());
+	// }
 }
