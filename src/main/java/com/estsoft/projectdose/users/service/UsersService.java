@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+
 @Service
 public class UsersService {
 
@@ -229,10 +230,10 @@ public class UsersService {
 		throw new IllegalStateException("해당 유저 없음");
 	}
 
-	// public List<String> getDeviceTokens(Long userId) {
-	// 	return deviceTokenRepository.findAllByUser_UserId(userId)
-	// 		.stream()
-	// 		.map(DeviceToken::getToken)
-	// 		.collect(Collectors.toList());
-	// }
+	public List<String> getDeviceTokens(Long userId) {
+		return deviceTokenRepository.findAllByUser_Id(userId)
+			.stream()
+			.map(DeviceToken::getToken)
+			.collect(Collectors.toList());
+	}
 }
