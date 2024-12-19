@@ -32,7 +32,8 @@ public class DeviceTokenServiceImpl implements DeviceTokenService {
 		if (userOptional.isPresent()) {
 			Users user = userOptional.get();
 
-			Optional<DeviceToken> existingToken = deviceTokenRepository.findByUserAndToken(user, deviceTokenDto.getToken());
+			Optional<DeviceToken> existingToken = deviceTokenRepository.findByUserAndToken(user,
+				deviceTokenDto.getToken());
 
 			if (existingToken.isPresent()) {
 				log.info("이미 등록된 FCM 토큰입니다.");
@@ -52,34 +53,20 @@ public class DeviceTokenServiceImpl implements DeviceTokenService {
 		}
 	}
 
+	@Override
+	@Transactional
+	public boolean deleteDeviceToken(String email, String token) {
+		Optional<Users> userOptional = usersRepository.findByEmail(email);
 
+		if (userOptional.isPresent()) {
+			Users user = userOptional.get();
+			Optional<DeviceToken> deviceTokenOptional = deviceTokenRepository.findByUserAndToken(user, token);
 
-	// @Transactional
-	// public boolean registerDeviceToken(DeviceTokenDto deviceTokenDto) {
-	// 	Optional<Users> userOptional = usersRepository.findById(deviceTokenDto.getUserId());
-	//
-	// 	if (userOptional.isPresent()) {
-	// 		Users user = userOptional.get();
-	//
-	// 		// 기존 토큰이 있는지 확인
-	// 		Optional<DeviceToken> existingToken = deviceTokenRepository.findByUserAndToken(user, deviceTokenDto.getToken());
-	//
-	// 		if (existingToken.isPresent()) {
-	// 			log.info("이미 등록된 FCM 토큰입니다.");
-	// 			return false;
-	// 		}
-	//
-	// 		// 새 토큰 등록
-	// 		DeviceToken deviceToken = DeviceToken.builder()
-	// 			.user(user)
-	// 			.token(deviceTokenDto.getToken())
-	// 			.build();
-	//
-	// 		deviceTokenRepository.save(deviceToken);
-	// 		return true;
-	// 	} else {
-	// 		log.warn("유효하지 않은 사용자입니다.");
-	// 		return false;
-	// 	}
-	// }
+			if (deviceTokenOptional.isPresent()) {
+				deviceTokenRepository.delete(deviceTokenOptional.get());
+				return true;
+			}
+		}
+		return false;
+	}
 }
