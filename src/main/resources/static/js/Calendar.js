@@ -183,7 +183,7 @@ function updateScheduleTable(data) {
         });
 
         //수정로직
-        row.querySelector(`.edit-btn`).addEventListener('click', () => {
+        row.querySelector('.edit-btn').addEventListener('click', () => {
             const modal = document.getElementById('edit-modal');
             const saveBtn = document.getElementById('save-btn');
             const cancelBtn = document.getElementById('cancel-btn');
@@ -191,6 +191,7 @@ function updateScheduleTable(data) {
             document.getElementById('doseTime').value = item.doseTime;
             document.getElementById('medicationName').value = item.medicationName;
             document.getElementById('dosage').value = item.dosage;
+
             modal.style.display = 'block';
 
             saveBtn.addEventListener('click',()=>{
@@ -240,3 +241,31 @@ document.addEventListener('DOMContentLoaded', function () {
 // 초기화 호출
 initializeCalendar();
 calendar.addEventListener('scroll', handleScroll);
+
+document.addEventListener('DOMContentLoaded', () => {
+    const menuButton = document.getElementById('menuButton');
+    const sideMenu = document.getElementById('sideMenu');
+    const closeButton = document.getElementById('closeButton');
+
+    if (menuButton && sideMenu && closeButton) {
+        // 메뉴 버튼 클릭 시 사이드바 열기
+        menuButton.addEventListener('click', () => {
+            sideMenu.classList.add('open');
+            menuButton.classList.add('open'); // 버튼 위치 변경
+        });
+
+        // 닫기 버튼 클릭 시 사이드바 닫기
+        closeButton.addEventListener('click', () => {
+            sideMenu.classList.remove('open');
+            menuButton.classList.remove('open'); // 버튼 위치 복원
+        });
+
+        // 사이드바 외부 클릭 시 닫기
+        document.addEventListener('click', (event) => {
+            if (!sideMenu.contains(event.target) && !menuButton.contains(event.target)) {
+                sideMenu.classList.remove('open');
+                menuButton.classList.remove('open'); // 버튼 위치 복원
+            }
+        });
+    }
+});
