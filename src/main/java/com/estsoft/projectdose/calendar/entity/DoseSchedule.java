@@ -3,7 +3,9 @@ package com.estsoft.projectdose.calendar.entity;
 import java.time.LocalDate;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.vladmihalcea.hibernate.type.json.JsonType;
 
 import org.hibernate.annotations.Type;
@@ -29,6 +31,7 @@ public class DoseSchedule {
 
 	@ManyToOne
 	@JoinColumn(name = "user_id")
+	@JsonIgnore
 	private Users users;
 
 	@Column(name = "medication_name", nullable = false, length = 100)

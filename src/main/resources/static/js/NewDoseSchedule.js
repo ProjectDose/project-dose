@@ -63,8 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const data = {};
         formData.forEach((value, key) => {
             if (key.startsWith('doseTime[') || key.startsWith('daysOfWeek[')) {
-                const fieldType = key.split('[')[0]; // doseTime 또는 daysOfWeek 추출
-                const fieldKey = key.match(/\[(.+)\]/)[1]; // 고유 키 추출 (time1, day1 등)
+                const [fieldType, fieldKey] = key.match(/(\w+)\[(\w+)\]/).slice(1);
                 if (!data[fieldType]) {
                     data[fieldType] = {};
                 }
@@ -73,6 +72,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 data[key] = value;
             }
         });
+
+        // 기존 코드
+        // const data = {};
+        // formData.forEach((value, key) => {
+        //     if (key.startsWith('doseTime[') || key.startsWith('daysOfWeek[')) {
+        //         const fieldType = key.split('[')[0]; // doseTime 또는 daysOfWeek 추출
+        //         const fieldKey = key.match(/\[(.+)\]/)[1]; // 고유 키 추출 (time1, day1 등)
+        //         if (!data[fieldType]) {
+        //             data[fieldType] = {};
+        //         }
+        //         data[fieldType][fieldKey] = value;
+        //     } else {
+        //         data[key] = value;
+        //     }
+        // });
 
         // 서버로 POST 요청 보내기
         fetch('/api/generate', {

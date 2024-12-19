@@ -64,12 +64,26 @@ public class DoseScheduleController {
 
 	//특정날짜 선택시 스케쥴 조회
 	@GetMapping("/api/Schedules/{startDate}")
-	public ResponseEntity<List<DoseScheduleResponse>> getSchedulesByDate(@PathVariable("startDate")
-	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate){
-		Long userId = usersService.getLoggedInUserId();
-		List<DoseScheduleResponse> schedules = doseScheduleService.findSchedulesByDateAndUserId(startDate,userId);
-		return ResponseEntity.ok(schedules);
+	public ResponseEntity<?> getSchedulesByDate(@PathVariable("startDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate) {
+		try {
+			Long userId = usersService.getLoggedInUserId();
+			List<DoseScheduleResponse> schedules = doseScheduleService.findSchedulesByDateAndUserId(startDate, userId);
+			return ResponseEntity.ok(schedules);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+				.body("스케줄을 가져오는 중 오류 발생: " + e.getMessage());
+		}
 	}
+
+	// 기존 코드
+	// @GetMapping("/api/Schedules/{startDate}")
+	// public ResponseEntity<List<DoseScheduleResponse>> getSchedulesByDate(@PathVariable("startDate")
+	// @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate){
+	// 	Long userId = usersService.getLoggedInUserId();
+	// 	List<DoseScheduleResponse> schedules = doseScheduleService.findSchedulesByDateAndUserId(startDate,userId);
+	// 	return ResponseEntity.ok(schedules);
+	// }
+
 	//투약 스케줄 수정
 	@PutMapping("/api/doseschedule/update/{id}")
 	public ResponseEntity<DoseScheduleResponse> updateDoseSchedule(
