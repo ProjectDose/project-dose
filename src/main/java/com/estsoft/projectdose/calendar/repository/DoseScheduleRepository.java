@@ -14,6 +14,9 @@ public interface DoseScheduleRepository extends JpaRepository<DoseSchedule, Long
 	//날짜 AND 사용자Id로 투약 스케쥴 찾기
 	List<DoseSchedule> findByStartDateAndUsers_Id(LocalDate startDate, Long userId);
 
+	@Query("SELECT ds FROM DoseSchedule ds WHERE ds.startDate <= :today")
+	List<DoseSchedule> findActiveSchedules(@Param("today") LocalDate today);
+
 	@Query("SELECT new com.estsoft.projectdose.report.dto.MedicationReportDto(" +
 		"ds.medicationName, " +
 		"COALESCE(ds.repeatInterval, 0), " +
