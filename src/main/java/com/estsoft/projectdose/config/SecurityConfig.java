@@ -36,7 +36,7 @@ public class SecurityConfig {
 					"/auth/**", "/oauth2/**", "/api/auth/**", "/error", "/favicon.ico",
 					"/api/ai/proxy", "/api/v1/**", "/api/v1/fcm/**","/firebase","/ai", "/firebase-messaging-sw.js"
 				).permitAll()
-				.anyRequest().permitAll()
+				.anyRequest().authenticated()
 			)
 			.formLogin(form -> form
 				.loginPage("/auth/login")
