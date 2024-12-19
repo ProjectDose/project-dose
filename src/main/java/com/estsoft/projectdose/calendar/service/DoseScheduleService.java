@@ -3,6 +3,7 @@ package com.estsoft.projectdose.calendar.service;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +44,7 @@ public class DoseScheduleService {
 			.orElseThrow(() -> new IllegalArgumentException("User not found with ID: " + userId));
 		doseSchedule.setUsers(user); // 사용자 설정
 		List<DoseSchedule> schedules = new ArrayList<>();
+
 		LocalDate startDate = doseSchedule.getStartDate();
 		int repeatInterval = doseSchedule.getRepeatInterval();
 		Map<String, Object> doseTime = doseSchedule.getDoseTime();
@@ -55,29 +57,28 @@ public class DoseScheduleService {
 			.toList();
 
 		// 요일 처리
-		Set<DayOfWeek> targetDays = daysOfWeek.values().stream()
+		List<DayOfWeek> targetDays = daysOfWeek.values().stream()
 			.map(day -> DayOfWeek.valueOf(((String) day).toUpperCase()))
-			.collect(Collectors.toSet());
+			.sorted()
+			.toList();
 
-		LocalDate currentDate = startDate;
-		int daysProcessed = 0;
+		// 반복 주기에 따른 스케줄 생성
+		for (int cycle = 0; cycle < repeatInterval; cycle++) {
+			for (DayOfWeek day : targetDays) {
+				LocalDate targetDate = startDate.plusWeeks(cycle).with(TemporalAdjusters.nextOrSame(day));
 
-		while (daysProcessed < repeatInterval) {
-			if (daysOfWeek.isEmpty() || targetDays.contains(currentDate.getDayOfWeek())) {
 				for (LocalTime time : doseTimes) {
 					DoseSchedule newSchedule = new DoseSchedule();
 					newSchedule.setMedicationName(doseSchedule.getMedicationName());
 					newSchedule.setUsers(doseSchedule.getUsers());
 					newSchedule.setDosage(doseSchedule.getDosage());
-					newSchedule.setStartDate(currentDate);
+					newSchedule.setStartDate(targetDate);
 					newSchedule.setDoseTime(Map.of("time", time.toString()));
-					newSchedule.setDaysOfWeek(Map.of("day", currentDate.getDayOfWeek().toString()));
+					newSchedule.setDaysOfWeek(Map.of("day", targetDate.getDayOfWeek().toString()));
 					newSchedule.setRepeatInterval(0); // 개별 일정은 반복 정보가 필요 없음
 					schedules.add(newSchedule);
 				}
 			}
-			currentDate = currentDate.plusDays(1);
-			daysProcessed++;
 		}
 		return doseScheduleRepository.saveAll(schedules);
 	}
