@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderPagination(pageData) {
         userListPagination.innerHTML = '';
 
-        // pageData의 존재 여부와 속성 확인
+        // pageData 유효성 검사
         if (!pageData || typeof pageData !== 'object') {
             console.error('페이지 데이터가 유효하지 않습니다.');
             return;
@@ -87,17 +87,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const totalPages = pageData.totalPages || 0;
         const currentPage = pageData.number || 0;
-        const isFirst = pageData.first || true;
-        const isLast = pageData.last || true;
+        const isFirst = pageData.first || false;
+        const isLast = pageData.last || false;
 
         // 이전 페이지 버튼
         const prevButton = document.createElement('li');
-        prevButton.classList.add('page-item', isFirst ? 'disabled' : '');
+        const prevClasses = ['page-item'];
+        if (isFirst) {
+            prevClasses.push('disabled');
+        }
+        prevButton.classList.add(...prevClasses);
+
         prevButton.innerHTML = `
-            <a class="page-link" href="#" ${isFirst ? 'tabindex="-1"' : ''}>
-                이전
-            </a>
-        `;
+        <a class="page-link" href="#" ${isFirst ? 'tabindex="-1"' : ''}>
+            이전
+        </a>
+    `;
+
         if (!isFirst) {
             prevButton.querySelector('a').addEventListener('click', (e) => {
                 e.preventDefault();
@@ -109,10 +115,16 @@ document.addEventListener('DOMContentLoaded', () => {
         // 페이지 번호 버튼
         for (let i = 0; i < totalPages; i++) {
             const pageButton = document.createElement('li');
-            pageButton.classList.add('page-item', currentPage === i ? 'active' : '');
+            const pageClasses = ['page-item'];
+            if (currentPage === i) {
+                pageClasses.push('active');
+            }
+            pageButton.classList.add(...pageClasses);
+
             pageButton.innerHTML = `
-                <a class="page-link" href="#">${i + 1}</a>
-            `;
+            <a class="page-link" href="#">${i + 1}</a>
+        `;
+
             pageButton.addEventListener('click', (e) => {
                 e.preventDefault();
                 loadUserList(i, currentSearchTerm);
@@ -122,12 +134,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // 다음 페이지 버튼
         const nextButton = document.createElement('li');
-        nextButton.classList.add('page-item', isLast ? 'disabled' : '');
+        const nextClasses = ['page-item'];
+        if (isLast) {
+            nextClasses.push('disabled');
+        }
+        nextButton.classList.add(...nextClasses);
+
         nextButton.innerHTML = `
-            <a class="page-link" href="#" ${isLast ? 'tabindex="-1"' : ''}>
-                다음
-            </a>
-        `;
+        <a class="page-link" href="#" ${isLast ? 'tabindex="-1"' : ''}>
+            다음
+        </a>
+    `;
+
         if (!isLast) {
             nextButton.querySelector('a').addEventListener('click', (e) => {
                 e.preventDefault();
