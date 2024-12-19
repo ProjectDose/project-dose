@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.estsoft.projectdose.admin.dto.PasswordResetRequest;
+import com.estsoft.projectdose.admin.dto.UserListResponse;
 import com.estsoft.projectdose.admin.service.AdminService;
 import com.estsoft.projectdose.users.entity.Users;
 
@@ -30,17 +31,22 @@ public class AdminController {
 	private final AdminService adminService;
 
 	@GetMapping("/list")
-	public ResponseEntity<Page<Users>> getUserList(
+	public ResponseEntity<Page<UserListResponse>> getUserList(
 		@PageableDefault(page = 0, size = 10, sort = "joinDate", direction = Sort.Direction.DESC) Pageable pageable
 	) {
-		return ResponseEntity.ok(adminService.getUserList(pageable));
+		Page<Users> usersPage = adminService.getUserList(pageable);
+		Page<UserListResponse> dtoPage = usersPage.map(UserListResponse::from);
+		return ResponseEntity.ok(dtoPage);
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<Page<Users>> searchUsers(
+	public ResponseEntity<Page<UserListResponse>> searchUsers(
 		@RequestParam String searchTerm,
-		@PageableDefault(page = 0, size = 10, sort = "joinDate", direction = Sort.Direction.DESC) Pageable pageable) {
-		return ResponseEntity.ok(adminService.searchUsers(searchTerm, pageable));
+		@PageableDefault(page = 0, size = 10, sort = "joinDate", direction = Sort.Direction.DESC) Pageable pageable
+	) {
+		Page<Users> usersPage = adminService.searchUsers(searchTerm, pageable);
+		Page<UserListResponse> dtoPage = usersPage.map(UserListResponse::from);
+		return ResponseEntity.ok(dtoPage);
 	}
 
 	@GetMapping("/{userId}")
