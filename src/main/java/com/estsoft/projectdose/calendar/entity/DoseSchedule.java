@@ -45,7 +45,7 @@ public class DoseSchedule {
 	private String dosage;
 
 	@Column(name = "repeat_interval")
-	private int repeatInterval;
+	private Integer repeatInterval;
 
 	@Type(JsonType.class)
 	@Column(name = "days_of_week",nullable = false, columnDefinition = "json")
