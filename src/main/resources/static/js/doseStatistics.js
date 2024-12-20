@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const endDate = document.getElementById('endDateInput').value;
 
         // PDF 다운로드 로직
-        window.location.href = `/api/report/pdf?startDate=${startDate}&endDate=${endDate}`;
+        window.location.href = `https://ppiyak.xyz/api/report/pdf?startDate=${startDate}&endDate=${endDate}`;
         reportModal.hide();
     });
 
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const endDate = document.getElementById('endDateInput').value;
 
         // 이메일 전송 로직
-        fetch(`/api/report/email?startDate=${startDate}&endDate=${endDate}`, {
+        fetch(`https://ppiyak.xyz/api/report/email?startDate=${startDate}&endDate=${endDate}`, {
             method: 'POST'
         })
             .then(response => {

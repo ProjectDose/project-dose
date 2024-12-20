@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        fetch(`/api/auth/checkNicknameDuplicate?nickname=${encodeURIComponent(nickname)}`)
+        fetch(`https://ppiyak.xyz/api/auth/checkNicknameDuplicate?nickname=${encodeURIComponent(nickname)}`)
             .then(response => response.json())
             .then(data => {
                 nicknameMessage.textContent = data.message;
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        fetch(`/api/auth/checkEmailDuplicate?email=${encodeURIComponent(email)}`)
+        fetch(`https://ppiyak.xyz/api/auth/checkEmailDuplicate?email=${encodeURIComponent(email)}`)
             .then(response => response.json())
             .then(data => {
                 emailMessage.textContent = data.message;

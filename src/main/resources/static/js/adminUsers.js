@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             // URL을 컨트롤러 매핑에 맞게 수정
             let url = searchTerm
-                ? `/api/admin/search?searchTerm=${searchTerm}&page=${page}&size=10`
-                : `/api/admin/list?page=${page}&size=10`;
+                ? `https://ppiyak.xyz/api/admin/search?searchTerm=${searchTerm}&page=${page}&size=10`
+                : `https://ppiyak.xyz/api/admin/list?page=${page}&size=10`;
 
             const response = await fetch(url);
             const responseData = await response.json();
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 회원 상세 정보 모달
     async function showUserDetail(userId) {
         try {
-            const response = await fetch(`/api/admin/${userId}`);
+            const response = await fetch(`https://ppiyak.xyz/api/admin/${userId}`);
             const user = await response.json();
 
             modalUserId.textContent = user.id;
@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // 회원 탈퇴/복구
     async function toggleUserDelete(userId) {
         try {
-            await fetch(`/api/admin/${userId}/toggle-delete`, {method: 'POST'});
+            await fetch(`https://ppiyak.xyz/api/admin/${userId}/toggle-delete`, {method: 'POST'});
             userDetailModal.hide();
             loadUserList(currentPage, currentSearchTerm);
         } catch (error) {
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const newPassword = generateTemporaryPassword();
 
         try {
-            const response = await fetch(`/api/admin/${userId}/reset-password`, {
+            const response = await fetch(`https://ppiyak.xyz/api/admin/${userId}/reset-password`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
