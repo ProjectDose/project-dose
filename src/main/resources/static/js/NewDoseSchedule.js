@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // });
 
         // 서버로 POST 요청 보내기
-        fetch('/api/generate', {
+        fetch('https://ppiyak.xyz/api/generate', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

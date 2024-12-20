@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!confirmation) return;
 
         try {
-            const response = await fetch(`/api/users/${userId}`, {
+            const response = await fetch(`https://ppiyak.xyz/api/users/${userId}`, {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' }
             });

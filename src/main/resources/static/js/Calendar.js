@@ -118,7 +118,7 @@ calendar.addEventListener('click', (event) => {
         calendarHeader.textContent = `선택된 날짜: ${clickedDate}`;
 
         // 서버에서 해당 날짜의 데이터 가져오기
-        fetch(`/api/Schedules/${clickedDate}`)
+        fetch(`https://ppiyak.xyz/api/Schedules/${clickedDate}`)
             .then((response) => {
                 if (!response.ok) throw new Error("데이터 요청 실패");
                 return response.json();
@@ -166,7 +166,7 @@ function updateScheduleTable(data) {
         scheduleContainer.appendChild(row);
         //삭제 로직
         row.querySelector('.delete-btn').addEventListener('click', () => {
-            fetch(`/api/doseschedule/delete/${item.scheduleId}`, {
+            fetch(`https://ppiyak.xyz/api/doseschedule/delete/${item.scheduleId}`, {
                 method: 'DELETE',
             })
                 .then(response => {
@@ -205,7 +205,7 @@ function updateScheduleTable(data) {
                     dosage: updatedDosage || item.dosage
                 };
 
-                fetch(`/api/doseschedule/update/${item.scheduleId}`, {
+                fetch(`https://ppiyak.xyz/api/doseschedule/update/${item.scheduleId}`, {
                     method: 'PuT',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(updatedData)

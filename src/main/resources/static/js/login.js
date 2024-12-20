@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (loginResponse.ok) {
-                await fetch('/api/v1/device-token/register', {
+                await fetch('https://ppiyak.xyz/api/v1/device-token/register', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        fetch('/api/auth/findPassword', {
+        fetch('https://ppiyak.xyz/api/auth/findPassword', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email: email })
